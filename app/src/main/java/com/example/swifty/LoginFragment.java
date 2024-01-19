@@ -1,29 +1,17 @@
 package com.example.swifty;
 
 import android.os.Bundle;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class LoginFragment extends Fragment {
 
@@ -55,16 +43,12 @@ public class LoginFragment extends Fragment {
 
             try {
                 if (isValidUser(username,password)){
-                    requireActivity().runOnUiThread(() -> {
-                        Navigation.findNavController(v).navigate(R.id.homeFragment);
-                    });
+                    requireActivity().runOnUiThread(() -> Navigation.findNavController(v).navigate(R.id.homeFragment));
                 }else {
                     requireActivity().runOnUiThread(() -> {
                         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
                         builder.setTitle("Error!").setMessage("Username or password is not valid.");
-                        builder.setPositiveButton("OK", (dialog, which) -> {
-                            dialog.dismiss();
-                        });
+                        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
                         builder.show();
                     });
                 }
