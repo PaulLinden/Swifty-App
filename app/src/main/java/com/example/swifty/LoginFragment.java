@@ -1,6 +1,8 @@
 package com.example.swifty;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,26 +14,43 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class LoginFragment extends Fragment {
 
+    private String serverUrl = null;
     public LoginFragment(){}
-
     public static LoginFragment newInstance() {
         LoginFragment fragment = new LoginFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
 
+        try {
+            serverUrl = getUrl(this.requireContext());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+
         // Set up button click listener for navigation
         Button nextButton = view.findViewById(R.id.loginButton);
         TextView usernameInput = view.findViewById(R.id.loginUsername);
@@ -59,21 +78,19 @@ public class LoginFragment extends Fragment {
 
         return view;
     }
+    private boolean isValidUser(String usernameInput, String passwordInput) throws JSONException {
 
-    public boolean isValidUser(String usernameInput, String passwordInput) throws JSONException {
-      /*  MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String url = "";
 
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("username", usernameInput);
         jsonBody.put("password", passwordInput);
 
-        RequestBody requestBody = RequestBody.create(JSON, String.valueOf(jsonBody));
+        RequestBody requestBody = RequestBody.create(String.valueOf(jsonBody),JSON);
 
         Request request = new Request.Builder()
-                .url(url)
+                .url(serverUrl)
                 .post(requestBody)
                 .header("Content-Type", "application/json")
                 .build();
@@ -93,7 +110,16 @@ public class LoginFragment extends Fragment {
         } catch (IOException | JSONException e) {
             e.printStackTrace();
             return false;
-        }*/
-        return true;
+        }
+    }
+    private String getUrl(Context context) throws IOException {
+        InputStream inputStream = context.getAssets().open("serverUrl.txt");
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+            return br.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return e.toString();
+        }
     }
 }
