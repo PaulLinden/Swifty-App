@@ -80,7 +80,7 @@ public class LoginFragment extends Fragment {
     }
     private boolean isValidUser(String usernameInput, String passwordInput) throws JSONException {
 
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+       /* MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
 
         JSONObject jsonBody = new JSONObject();
@@ -111,6 +111,8 @@ public class LoginFragment extends Fragment {
             e.printStackTrace();
             return false;
         }
+        */
+        return true;
     }
     private String getUrl(Context context) throws IOException {
         InputStream inputStream = context.getAssets().open("serverUrl.txt");
