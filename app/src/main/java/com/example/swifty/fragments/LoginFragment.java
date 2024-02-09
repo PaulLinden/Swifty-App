@@ -1,8 +1,7 @@
-package com.example.swifty;
+package com.example.swifty.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,31 +11,33 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
+
+import com.example.swifty.R;
+import com.example.swifty.activities.MainActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
 public class LoginFragment extends Fragment {
 
     private String serverUrl = null;
-    public LoginFragment(){}
+
+    public LoginFragment() {
+    }
+
     public static LoginFragment newInstance() {
         LoginFragment fragment = new LoginFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,24 +48,35 @@ public class LoginFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+
+        MainActivity activity = (MainActivity) requireActivity();
+
+        requireActivity().runOnUiThread(() -> {
+            activity.setBottomNavigationBarVisibility(false);
+        });
 
         // Set up button click listener for navigation
         Button nextButton = view.findViewById(R.id.loginButton);
         TextView usernameInput = view.findViewById(R.id.loginUsername);
         TextView passwordInput = view.findViewById(R.id.loginPassword);
 
-        nextButton.setOnClickListener(v -> new Thread(() ->{
+        nextButton.setOnClickListener(v -> new Thread(() -> {
             String username = usernameInput.getText().toString();
             String password = passwordInput.getText().toString();
 
             try {
-                if (isValidUser(username,password)){
-                    requireActivity().runOnUiThread(() -> Navigation.findNavController(v).navigate(R.id.homeFragment));
-                }else {
+                if (isValidUser(username, password)) {
                     requireActivity().runOnUiThread(() -> {
+                        activity.setBottomNavigationBarVisibility(true);
+                        Navigation.findNavController(v).navigate(R.id.homeFragment);
+                    });
+                } else {
+                    requireActivity().runOnUiThread(() -> {
+                        activity.setBottomNavigationBarVisibility(false);
                         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
                         builder.setTitle("Error!").setMessage("Username or password is not valid.");
                         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
@@ -78,6 +90,7 @@ public class LoginFragment extends Fragment {
 
         return view;
     }
+
     private boolean isValidUser(String usernameInput, String passwordInput) throws JSONException {
 
        /* MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -114,6 +127,7 @@ public class LoginFragment extends Fragment {
         */
         return true;
     }
+
     private String getUrl(Context context) throws IOException {
         InputStream inputStream = context.getAssets().open("serverUrl.txt");
 

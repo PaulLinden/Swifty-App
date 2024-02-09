@@ -5,11 +5,11 @@
         android:title="Person"
         android:icon="@drawable/ic_person_foreground"/>
     <item
-        android:id="@+id/home"
+        android:id="@+id/homeFragment"
         android:title="Home"
         android:icon="@drawable/ic_home_foreground"/>
     <item
-        android:id="@+id/settings"
-        android:title="Settings"
-        android:icon="@drawable/ic_settings_foreground"/>
+        android:id="@+id/cartFragment"
+        android:title="Cart"
+        android:icon="@drawable/ic_cart_foreground"/>
 </menu>
