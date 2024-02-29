@@ -68,7 +68,7 @@ public class HomeFragment extends Fragment {
                 view.findViewById(R.id.image_view4),
                 view.findViewById(R.id.image_view5),};
 
-        new Thread(() -> {
+        Thread dataThread = new Thread(() -> {
             try {
                 JSONObject companies = Objects.requireNonNull(getCompanies());
                 Iterator<String> companyKeys = companies.keys();
@@ -132,7 +132,14 @@ public class HomeFragment extends Fragment {
                 //throw new RuntimeException(e);
                 System.out.println(e);
             }
-        }).start();
+        });
+        dataThread.start();
+
+        try {
+            dataThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
         return view;
