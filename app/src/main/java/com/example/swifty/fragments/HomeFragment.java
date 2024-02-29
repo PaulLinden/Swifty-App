@@ -122,7 +122,7 @@ public class HomeFragment extends Fragment {
                             args.putSerializable("company", newCompany);
                             fragment.setArguments(args);
 
-                            requireActivity().runOnUiThread(() -> Navigation.findNavController(v).navigate(R.id.companyDetailFragment, args));
+                            requireActivity().runOnUiThread(() -> Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_companyDetailFragment, args));
                         });
                     });
 

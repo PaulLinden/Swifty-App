@@ -1,16 +1,18 @@
 package com.example.swifty.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.swifty.R;
 import com.example.swifty.adapters.CartAdapter;
@@ -55,6 +57,14 @@ public class CartFragment extends Fragment {
         cartViewModel.getCartItemsLiveData().observe(getViewLifecycleOwner(), cartItems -> {
             // Update UI with the new cart items data
             cartAdapter.setCartItems(cartItems); // Update adapter with new data
+        });
+
+        Button checkOut = view.findViewById(R.id.checkoutButton);
+
+        checkOut.setOnClickListener((v)->{
+            requireActivity().runOnUiThread(() -> {
+                Navigation.findNavController(v).navigate(R.id.action_cartFragment_to_deliverFragment);
+            });
         });
 
         return view;

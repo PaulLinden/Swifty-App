@@ -39,6 +39,15 @@
         android:id="@+id/cartFragment"
         android:name="com.example.swifty.fragments.CartFragment"
         android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart" />
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/action_cartFragment_to_deliverFragment"
+            app:destination="@id/deliverFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/deliverFragment"
+        android:name="com.example.swifty.fragments.DeliverFragment"
+        android:label="fragment_deliver"
+        tools:layout="@layout/fragment_deliver" />
 
 </navigation>

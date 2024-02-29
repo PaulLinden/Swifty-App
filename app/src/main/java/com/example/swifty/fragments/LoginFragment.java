@@ -72,7 +72,7 @@ public class LoginFragment extends Fragment {
                 if (isValidUser(username, password)) {
                     requireActivity().runOnUiThread(() -> {
                         activity.setBottomNavigationBarVisibility(true);
-                        Navigation.findNavController(v).navigate(R.id.homeFragment);
+                        Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_homeFragment);
                     });
                 } else {
                     requireActivity().runOnUiThread(() -> {
