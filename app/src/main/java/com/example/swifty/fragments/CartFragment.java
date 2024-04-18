@@ -2,13 +2,14 @@ package com.example.swifty.fragments;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,10 @@ import android.widget.Button;
 
 import com.example.swifty.R;
 import com.example.swifty.adapters.CartAdapter;
-import com.example.swifty.models.CartViewModel;
+import com.example.swifty.view_models.CartViewModel;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class CartFragment extends Fragment {
 
@@ -52,7 +54,6 @@ public class CartFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         // Set adapter to RecyclerView
         recyclerView.setAdapter(cartAdapter);
-
 
         cartViewModel.getCartItemsLiveData().observe(getViewLifecycleOwner(), cartItems -> {
             // Update UI with the new cart items data

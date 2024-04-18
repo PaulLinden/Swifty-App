@@ -3,7 +3,6 @@ package com.example.swifty.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
@@ -13,11 +12,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.swifty.R;
 import com.example.swifty.models.CartItem;
-import com.example.swifty.models.CartViewModel;
+import com.example.swifty.view_models.CartViewModel;
 import com.example.swifty.models.CompanyModel;
 import com.squareup.picasso.Picasso;
 
@@ -65,15 +63,6 @@ public class ShopFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_company, container, false);
 
-        /* Observe changes in the cart items LiveData
-        cartViewModel.getCartItemsLiveData().observe(getViewLifecycleOwner(), new Observer<List<CartItem>>() {
-            @Override
-            public void onChanged(List<CartItem> cartItems) {
-                // Update UI with the new cart items data
-            }
-            */
-
-
         TextView companyName = view.findViewById(R.id.nameTextView);
         ImageView companyImg = view.findViewById(R.id.companyImageView);
         LinearLayout productContainer = view.findViewById(R.id.productContainer);
@@ -109,7 +98,6 @@ public class ShopFragment extends Fragment {
                 Button addButton = new Button(requireContext());
                 addButton.setText("Add");
 
-                // Set onClickListener for the "Add" button (add your logic here)
                 addButton.setOnClickListener(v -> {
                     // Create a new CartItem and add it to the cart
                     CartItem cartItem = new CartItem(productName, Double.parseDouble(price) , 1);

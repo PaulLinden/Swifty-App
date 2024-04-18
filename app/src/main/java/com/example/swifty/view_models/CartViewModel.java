@@ -1,8 +1,11 @@
-package com.example.swifty.models;
+package com.example.swifty.view_models;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.example.swifty.models.CartItem;
+
 import java.util.ArrayList;
 import java.util.List;
 

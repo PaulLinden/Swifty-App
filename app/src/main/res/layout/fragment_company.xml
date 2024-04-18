@@ -21,7 +21,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.071" />
+            app:layout_constraintVertical_bias="0.023" />
 
         <ImageView
             android:id="@+id/companyImageView"
@@ -39,7 +39,7 @@
             android:id="@+id/productContainer"
             android:layout_width="350dp"
             android:layout_height="406dp"
-            android:layout_marginTop="56dp"
+            android:layout_marginTop="16dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
             app:layout_constraintEnd_toEndOf="parent"

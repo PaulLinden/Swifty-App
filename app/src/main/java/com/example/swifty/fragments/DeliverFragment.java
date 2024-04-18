@@ -1,6 +1,7 @@
 package com.example.swifty.fragments;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.Manifest;
 import android.graphics.drawable.Drawable;
@@ -8,13 +9,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.swifty.R;
+import com.example.swifty.activities.MainActivity;
+import com.example.swifty.adapters.CartAdapter;
+import com.example.swifty.models.CartItem;
 import com.example.swifty.utils.CoordinatesCalculator;
 import com.example.swifty.utils.MyLocation;
+import com.example.swifty.view_models.CartViewModel;
 
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
@@ -33,6 +44,8 @@ public class DeliverFragment extends Fragment implements MyLocation.OnLocationRe
     private GeoPoint startPoint, endPoint, midPoint;
     private MapView mapView;
     private Drawable person;
+    private CartViewModel cartViewModel;
+    private CartAdapter cartAdapter;
 
     public DeliverFragment() {
     }
@@ -47,11 +60,26 @@ public class DeliverFragment extends Fragment implements MyLocation.OnLocationRe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        cartViewModel = new ViewModelProvider(requireActivity()).get(CartViewModel.class);
+        cartAdapter = new CartAdapter(new ArrayList<>()); // Initialize with an empty list
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_deliver, container, false);
+        RecyclerView recyclerView = view.findViewById(R.id.checkOutRecyclerView);
+        MainActivity activity = (MainActivity) requireActivity();
+        Button closeButton = view.findViewById(R.id.closeButton);
+
+        //Hide navbar
+        requireActivity().runOnUiThread(() -> {
+            activity.setBottomNavigationBarVisibility(false);
+        });
+        //On close got to home and display navbar again
+        closeButton.setOnClickListener((v)->{
+            Navigation.findNavController(v).navigate(R.id.action_deliverFragment_to_companyDetailFragment2);
+            activity.setBottomNavigationBarVisibility(true);
+        });
 
         //Get Icon
         person = ContextCompat.getDrawable(requireContext(), org.osmdroid.library.R.drawable.person);
@@ -64,6 +92,17 @@ public class DeliverFragment extends Fragment implements MyLocation.OnLocationRe
         //Get users location
         MyLocation.getMyCoordinates(requireContext(), DeliverFragment.this);
         Configuration.getInstance().load(getContext(), androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext()));
+
+
+        //Set checkout list...............
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        // Set adapter to RecyclerView
+        recyclerView.setAdapter(cartAdapter);
+
+        // Observe changes to the cart items LiveData
+        cartViewModel.getCartItemsLiveData().observe(getViewLifecycleOwner(), cartItems -> {
+            cartAdapter.setCartItems(cartItems); // Update adapter with new data
+        });
 
         return view;
     }
