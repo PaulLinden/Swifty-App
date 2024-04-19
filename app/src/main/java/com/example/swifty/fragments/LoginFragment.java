@@ -2,6 +2,7 @@ package com.example.swifty.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,22 +12,31 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import com.example.swifty.R;
 import com.example.swifty.activities.MainActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.swifty.managers.UserSessionManager;
+import com.example.swifty.models.UserModel;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class LoginFragment extends Fragment {
 
     private String serverUrl = null;
+    private UserModel currentUser;
+    private UserSessionManager sessionManager;
 
     public LoginFragment() {
     }
@@ -41,6 +51,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sessionManager = new UserSessionManager(requireContext());
 
         try {
             serverUrl = getUrl(this.requireContext());
@@ -71,6 +82,15 @@ public class LoginFragment extends Fragment {
             try {
                 if (isValidUser(username, password)) {
                     requireActivity().runOnUiThread(() -> {
+
+                        sessionManager.saveUserCredentials(
+                                currentUser.getUserName(),
+                                currentUser.getFirstName(),
+                                currentUser.getLastName(),
+                                currentUser.getEmail(),
+                                currentUser.getBirthDate()
+                        );
+
                         activity.setBottomNavigationBarVisibility(true);
                         Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_homeFragment);
                     });
@@ -93,14 +113,14 @@ public class LoginFragment extends Fragment {
 
     private boolean isValidUser(String usernameInput, String passwordInput) throws JSONException {
 
-       /* MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
 
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("username", usernameInput);
         jsonBody.put("password", passwordInput);
 
-        RequestBody requestBody = RequestBody.create(String.valueOf(jsonBody),JSON);
+        RequestBody requestBody = RequestBody.create(String.valueOf(jsonBody), JSON);
 
         Request request = new Request.Builder()
                 .url(serverUrl)
@@ -116,16 +136,24 @@ public class LoginFragment extends Fragment {
 
                 // Log JSON data
                 Log.d("MyApp", "JSON data: " + jsonData);
+                //JSON data: {"id":2,"username":"Kae","email":"777777","name":"Nyttnamn","lastName":"NYtteftername","birtDate":"1991-01-27"}
+                currentUser = new UserModel();
+                currentUser.setId(jsonData.getLong("id"));
+                currentUser.setUserName(jsonData.getString("username"));
+                currentUser.setEmail(jsonData.getString("email"));
+                currentUser.setFirstName(jsonData.getString("name"));
+                currentUser.setLastName(jsonData.getString("lastName"));
+                currentUser.setBirthDate(jsonData.getString("birtDate"));
+
                 return true;
-            }else {
+            } else {
                 return false;
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
             return false;
         }
-        */
-        return true;
+
     }
 
     private String getUrl(Context context) throws IOException {

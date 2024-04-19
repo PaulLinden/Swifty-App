@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -70,17 +71,7 @@ public class HomeFragment extends Fragment {
 
         Thread dataThread = new Thread(() -> {
             try {
-                JSONObject companies = Objects.requireNonNull(getCompanies());
-                Iterator<String> companyKeys = companies.keys();
-
-                List<JSONObject> companyList = new ArrayList<>(); // Create a list to store company objects
-
-                while(companyKeys.hasNext()){
-                    String key = companyKeys.next(); // Get the next key
-                    JSONObject company = companies.getJSONObject(key); // Get the object associated with the key
-
-                    companyList.add(company); // Add the company object to the list
-                }
+                List<JSONObject> companyList = getCompanyList();
 
                 int index = 0;
                 for (JSONObject company : companyList) {
@@ -143,6 +134,22 @@ public class HomeFragment extends Fragment {
 
 
         return view;
+    }
+
+    @NonNull
+    private List<JSONObject> getCompanyList() throws JSONException {
+        JSONObject companies = Objects.requireNonNull(getCompanies());
+        Iterator<String> companyKeys = companies.keys();
+
+        List<JSONObject> companyList = new ArrayList<>(); // Create a list to store company objects
+
+        while(companyKeys.hasNext()){
+            String key = companyKeys.next(); // Get the next key
+            JSONObject company = companies.getJSONObject(key); // Get the object associated with the key
+
+            companyList.add(company); // Add the company object to the list
+        }
+        return companyList;
     }
 
     private JSONObject getCompanies() throws JSONException {

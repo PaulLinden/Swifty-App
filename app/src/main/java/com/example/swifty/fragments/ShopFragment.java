@@ -63,7 +63,7 @@ public class ShopFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_company, container, false);
 
-        TextView companyName = view.findViewById(R.id.nameTextView);
+        TextView companyName = view.findViewById(R.id.usernameTextView);
         ImageView companyImg = view.findViewById(R.id.companyImageView);
         LinearLayout productContainer = view.findViewById(R.id.productContainer);
 
