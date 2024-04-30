@@ -4,72 +4,143 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ProfileFragment" >
+    android:background="@drawable/app_bg"
+    tools:context=".fragments.ProfileFragment">
 
-    <TextView
-        android:id="@+id/usernameTextView"
-        android:layout_width="296dp"
-        android:layout_height="38dp"
-        android:text="Username"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <ImageView
+        android:id="@+id/profileImageView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:contentDescription="@string/profile_picture"
+        android:translationZ="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.056" />
+        app:layout_constraintVertical_bias="0.116"
+        tools:src="@drawable/profile_placeholder" />
 
-    <TextView
-        android:id="@+id/emailTextView"
-        android:layout_width="309dp"
-        android:layout_height="36dp"
-        android:text="Email:"
-        android:textSize="24sp"
+    <LinearLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="548dp"
+        android:background="@drawable/rounded_corners_top"
+        android:gravity="center"
+        android:orientation="vertical"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.156"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameTextView"
-        app:layout_constraintVertical_bias="0.058" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
-    <TextView
-        android:id="@+id/birthDateTextView"
-        android:layout_width="309dp"
-        android:layout_height="36dp"
-        android:layout_marginBottom="216dp"
-        android:text="Birthdate:"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.156"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lastNameTextView"
-        app:layout_constraintVertical_bias="0.096" />
+        <!-- Username  -->
+        <TextView
+            android:id="@+id/usernameTextView"
+            android:layout_width="296dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
 
-    <TextView
-        android:id="@+id/firstNameTextView"
-        android:layout_width="309dp"
-        android:layout_height="36dp"
-        android:text="First name:"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.156"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailTextView"
-        app:layout_constraintVertical_bias="0.047" />
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/dark_blue"
+            android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/lastNameTextView"
-        android:layout_width="309dp"
-        android:layout_height="36dp"
-        android:text="Last name:"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.156"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstNameTextView"
-        app:layout_constraintVertical_bias="0.051" />
+        <!-- Email  -->
+        <TextView
+            android:id="@+id/emailLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-120dp"
+            android:gravity="start"
+            android:text="@string/email"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/emailTextView"
+            android:layout_width="309dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/round_corners_black_border"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="5dp"
+            android:textColor="@color/dark_blue"
+            android:textSize="24sp" />
+
+        <!-- First name  -->
+
+        <TextView
+            android:id="@+id/firstNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-100dp"
+            android:text="@string/first_name"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/firstNameTextView"
+            android:layout_width="309dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/round_corners_black_border"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="5dp"
+            android:textColor="@color/dark_blue"
+            android:textSize="24sp" />
+
+        <!-- Last name  -->
+        <TextView
+            android:id="@+id/lastNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="120dp"
+            android:text="@string/last_name"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/lastNameTextView"
+            android:layout_width="309dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/round_corners_black_border"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="5dp"
+            android:textColor="@color/dark_blue"
+            android:textSize="24sp" />
+
+        <!-- Birthdate  -->
+        <TextView
+            android:id="@+id/birthDateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="120dp"
+            android:text="@string/birthdate"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/birthDateTextView"
+            android:layout_width="309dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="84dp"
+            android:background="@drawable/round_corners_black_border"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="5dp"
+            android:textColor="@color/dark_blue"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+

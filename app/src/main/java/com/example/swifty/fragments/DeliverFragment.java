@@ -73,12 +73,12 @@ public class DeliverFragment extends Fragment implements MyLocation.OnLocationRe
 
         //Hide navbar
         requireActivity().runOnUiThread(() -> {
-            activity.setBottomNavigationBarVisibility(false);
+            activity.setBottomNavigationBarVisibility(false, activity.bottomNavigationView);
         });
         //On close got to home and display navbar again
         closeButton.setOnClickListener((v)->{
             Navigation.findNavController(v).navigate(R.id.action_deliverFragment_to_companyDetailFragment2);
-            activity.setBottomNavigationBarVisibility(true);
+            activity.setBottomNavigationBarVisibility(true, activity.bottomNavigationView);
         });
 
         //Get Icon

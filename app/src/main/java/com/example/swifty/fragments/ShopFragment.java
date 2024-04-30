@@ -13,11 +13,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.swifty.R;
 import com.example.swifty.models.CartItem;
 import com.example.swifty.view_models.CartViewModel;
 import com.example.swifty.models.CompanyModel;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,7 +68,7 @@ public class ShopFragment extends Fragment {
         LinearLayout productContainer = view.findViewById(R.id.productContainer);
 
         companyName.setText(company.getName());
-        Picasso.get().load(company.getUrl()).into(companyImg);
+        Glide.with(this).load(company.getUrl()).into(companyImg);
 
 
         // Iterate over the product list and add views for each product

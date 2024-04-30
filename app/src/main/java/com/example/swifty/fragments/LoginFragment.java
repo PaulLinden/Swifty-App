@@ -67,7 +67,7 @@ public class LoginFragment extends Fragment {
         MainActivity activity = (MainActivity) requireActivity();
 
         requireActivity().runOnUiThread(() -> {
-            activity.setBottomNavigationBarVisibility(false);
+            activity.setBottomNavigationBarVisibility(false, activity.bottomNavigationView);
         });
 
         // Set up button click listener for navigation
@@ -91,12 +91,12 @@ public class LoginFragment extends Fragment {
                                 currentUser.getBirthDate()
                         );
 
-                        activity.setBottomNavigationBarVisibility(true);
+                        activity.setBottomNavigationBarVisibility(true, activity.bottomNavigationView);
                         Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_homeFragment);
                     });
                 } else {
                     requireActivity().runOnUiThread(() -> {
-                        activity.setBottomNavigationBarVisibility(false);
+                        activity.setBottomNavigationBarVisibility(false, activity.bottomNavigationView);
                         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
                         builder.setTitle("Error!").setMessage("Username or password is not valid.");
                         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());

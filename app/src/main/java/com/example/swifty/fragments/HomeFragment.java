@@ -1,6 +1,7 @@
 package com.example.swifty.fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,9 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.Transformation;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.swifty.R;
 import com.example.swifty.models.CompanyModel;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +33,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -35,6 +41,7 @@ import okhttp3.Response;
 public class HomeFragment extends Fragment {
 
     String companyUrl = null;
+    MultiTransformation<Bitmap> transformation = new MultiTransformation<>(new RoundedCornersTransformation(180, 20, RoundedCornersTransformation.CornerType.ALL));
 
     public HomeFragment() {
     }
@@ -62,7 +69,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         List<String> imageUrls = new ArrayList<>();
-        ImageView [] views = {
+        ImageView[] views = {
                 view.findViewById(R.id.image_view1),
                 view.findViewById(R.id.image_view2),
                 view.findViewById(R.id.image_view3),
@@ -105,7 +112,12 @@ public class HomeFragment extends Fragment {
 
                     int finalIndex = index;
                     requireActivity().runOnUiThread(() -> {
-                        Picasso.get().load(imageUrls.get(finalIndex)).into(views[finalIndex]);
+
+                        Glide.with(this)
+                                .load(imageUrls.get(finalIndex))
+                                .apply(RequestOptions.bitmapTransform(transformation))
+                                .into(views[finalIndex]);
+
 
                         views[finalIndex].setOnClickListener(v -> {
                             ShopFragment fragment = new ShopFragment();
@@ -143,7 +155,7 @@ public class HomeFragment extends Fragment {
 
         List<JSONObject> companyList = new ArrayList<>(); // Create a list to store company objects
 
-        while(companyKeys.hasNext()){
+        while (companyKeys.hasNext()) {
             String key = companyKeys.next(); // Get the next key
             JSONObject company = companies.getJSONObject(key); // Get the object associated with the key
 
@@ -169,7 +181,7 @@ public class HomeFragment extends Fragment {
                 // Log JSON data
                 Log.d("MyApp", "JSON data: " + jsonData);
                 return jsonData;
-            }else {
+            } else {
                 Log.d("MyApp", "!!!!!!!!!Couldn't fetch data for companies!!!!!!!!!!!!!!!!!");
             }
         } catch (IOException | JSONException e) {
