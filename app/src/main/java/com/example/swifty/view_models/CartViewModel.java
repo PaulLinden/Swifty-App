@@ -28,12 +28,10 @@ public class CartViewModel extends ViewModel {
                 break;
             }
         }
-
         // If the item doesn't exist, add it to the cart
         if (!itemExists) {
             cartItems.add(cartItem);
         }
-
         cartItemsLiveData.setValue(cartItems);
     }
 

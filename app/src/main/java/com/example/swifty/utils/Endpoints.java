@@ -1,40 +1,72 @@
 package com.example.swifty.utils;
 
 import android.content.Context;
-
-import java.io.BufferedReader;
+import android.content.res.AssetManager;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.Properties;
 
 public class Endpoints {
 
-    public static String getLoginUrl(Context context) throws IOException {
-        InputStream inputStream = context.getAssets().open("loginUrl.txt");
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
-            return br.readLine();
+    private static String BASE_URL;
+
+    public static void initBaseUrl(Context context) throws IOException {
+
+        Properties properties = new Properties();
+        try {
+            AssetManager assetManager = context.getAssets();
+            InputStream inputStream = assetManager.open("config.properties");
+            properties.load(inputStream);
+           BASE_URL = properties.getProperty("BASE_URL");
         } catch (IOException e) {
-            return e.toString();
+            e.fillInStackTrace();
+        }
+    }
+
+    public static String getLoginUrl(Context context) throws IOException {
+
+        Properties properties = new Properties();
+        try {
+            AssetManager assetManager = context.getAssets();
+            InputStream inputStream = assetManager.open("config.properties");
+            properties.load(inputStream);
+            String login = properties.getProperty("LOGIN");
+
+            return BASE_URL.concat(login);
+        } catch (IOException e) {
+            e.fillInStackTrace();
+            return null;
         }
     }
 
     public static String getTransactionUrl(Context context) throws IOException {
-        InputStream inputStream = context.getAssets().open("transactionUrl.txt");
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
-            return br.readLine();
+        Properties properties = new Properties();
+        try {
+            AssetManager assetManager = context.getAssets();
+            InputStream inputStream = assetManager.open("config.properties");
+            properties.load(inputStream);
+            String transaction = properties.getProperty("TRANSACTION");
+
+            return BASE_URL.concat(transaction);
         } catch (IOException e) {
-            return e.toString();
+            e.fillInStackTrace();
+            return null;
         }
     }
 
     public static String getCompanyUrl(Context context) throws IOException {
-        InputStream inputStream = context.getAssets().open("companyUrl.txt");
+        Properties properties = new Properties();
+        try {
+            AssetManager assetManager = context.getAssets();
+            InputStream inputStream = assetManager.open("config.properties");
+            properties.load(inputStream);
+            String company = properties.getProperty("COMPANY");
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
-            return br.readLine();
+            return BASE_URL.concat(company);
         } catch (IOException e) {
-            return e.toString();
+            e.fillInStackTrace();
+            return null;
         }
     }
 }

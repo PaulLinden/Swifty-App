@@ -1,5 +1,7 @@
 package com.example.swifty.activities;
 
+import static com.example.swifty.utils.Endpoints.initBaseUrl;
+
 import android.Manifest;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +16,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.swifty.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,9 +26,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        try {
+            initBaseUrl(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //Setup for navigation
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
         assert navHostFragment != null;
