@@ -23,4 +23,7 @@
     <string name="profile_picture">profile_picture</string>
     <string name="profile">profile</string>
     <string name="home">home</string>
+    <string name="close">Close</string>
+    <string name="brand_img">brand_img</string>
+    <string name="company">Company</string>
 </resources>

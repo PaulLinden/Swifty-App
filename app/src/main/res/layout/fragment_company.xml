@@ -11,42 +11,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/usernameTextView"
-            android:layout_width="191dp"
-            android:layout_height="40dp"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.023" />
 
         <ImageView
             android:id="@+id/companyImageView"
-            android:layout_width="189dp"
-            android:layout_height="101dp"
+            android:layout_width="234dp"
+            android:layout_height="132dp"
+            android:contentDescription="@string/brand_img"
             android:src="@drawable/ic_home_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/usernameTextView"
-            app:layout_constraintVertical_bias="0.037" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.061" />
 
         <LinearLayout
             android:id="@+id/productContainer"
             android:layout_width="350dp"
             android:layout_height="406dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/companyImageView"
-            app:layout_constraintVertical_bias="0.575" />
+            app:layout_constraintTop_toBottomOf="@+id/companyImageView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

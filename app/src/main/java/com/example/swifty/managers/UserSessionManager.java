@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 public class UserSessionManager {
     private static final String PREFERENCES_NAME = "UserPrefs";
+    private static final String KEY_USERID = "userId";
     private static final String KEY_USERNAME = "username";
     private static final String KEY_FIRSTNAME = "firstName";
     private static final String KEY_LASTNAME = "lastName";
@@ -19,7 +20,8 @@ public class UserSessionManager {
         editor = sharedPreferences.edit();
     }
 
-    public void saveUserCredentials(String username, String firstName, String lastName, String email, String birthDate) {
+    public void saveUserCredentials(String userId, String username, String firstName, String lastName, String email, String birthDate) {
+        editor.putString(KEY_USERID, userId);
         editor.putString(KEY_USERNAME, username);
         editor.putString(KEY_FIRSTNAME, firstName);
         editor.putString(KEY_LASTNAME, lastName);
@@ -29,11 +31,12 @@ public class UserSessionManager {
     }
 
     public String[] getUserCredentials() {
+        String userId = sharedPreferences.getString(KEY_USERID, "");
         String username = sharedPreferences.getString(KEY_USERNAME, "");
         String firstName = sharedPreferences.getString(KEY_FIRSTNAME, "");
         String lastName = sharedPreferences.getString(KEY_LASTNAME, "");
         String email = sharedPreferences.getString(KEY_EMAIL, "");
         String birthDate = sharedPreferences.getString(KEY_BIRTHDATE, "");
-        return new String[]{username, firstName, lastName, email, birthDate};
+        return new String[]{userId, username, firstName, lastName, email, birthDate};
     }
 }

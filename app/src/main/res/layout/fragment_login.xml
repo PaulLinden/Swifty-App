@@ -27,7 +27,7 @@
             android:background="@drawable/round_corners"
             android:textColor="@color/dark_blue"
             android:inputType="textPersonName"
-            android:hint="swifty_user"
+            android:hint="@string/username"
             android:textColorHint="@color/mid_grey"
             app:hintTextAppearance="@color/mid_grey"
             android:paddingHorizontal="15dp"
@@ -59,7 +59,7 @@
         android:layout_height="56dp"
         android:autofillHints="password"
         android:background="@drawable/round_corners"
-        android:hint="***********"
+        android:hint="@string/password"
         android:inputType="textPassword"
         android:paddingHorizontal="15dp"
 

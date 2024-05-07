@@ -17,10 +17,30 @@ public class CartViewModel extends ViewModel {
     }
 
     public void addToCart(CartItem cartItem) {
-        cartItems.add(cartItem);
-        System.out.println(cartItem);
+        boolean itemExists = false;
+
+        // Check if the item already exists in the cart
+        for (CartItem item : cartItems) {
+            if (item.getProductName().equals(cartItem.getProductName())) {
+                item.increaseQuantity();
+                item.increasePrice();
+                itemExists = true;
+                break;
+            }
+        }
+
+        // If the item doesn't exist, add it to the cart
+        if (!itemExists) {
+            cartItems.add(cartItem);
+        }
+
         cartItemsLiveData.setValue(cartItems);
-        System.out.println(cartItems.size());
+    }
+
+
+    public void emptyCart() {
+        cartItems.clear();
+        cartItemsLiveData.setValue(cartItems);
     }
 }
 

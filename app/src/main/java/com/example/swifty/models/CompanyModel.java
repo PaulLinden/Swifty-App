@@ -6,25 +6,20 @@ import java.util.List;
 
 public class CompanyModel implements Serializable {
 
-    public CompanyModel(){};
-    private String name;
-    private String industry;
-    private String url;
-    private List<String> productList;
+    public CompanyModel(String companyName, String url, List<String> productList){
+        this.companyName = companyName;
+        this.url = url;
+        this.productList = productList;
+    }
 
-    public String getIndustry() {return industry;}
+    private final String companyName;
+    private final String url;
+    private final List<String> productList;
 
-    public void setIndustry(String industry) {this.industry = industry;}
-
-    public String getName() {return name;}
+    public String getCompanyName() {return companyName;}
 
     public String getUrl() {return url;}
 
-    public void setUrl(String url) {this.url = url;}
-
     public List<String> getProductList() {return productList;}
 
-    public void setProductList(List<String> productList) {this.productList = productList;}
-
-    public void setName(String name) {this.name = name;}
 }

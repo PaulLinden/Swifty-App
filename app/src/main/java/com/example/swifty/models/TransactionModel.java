@@ -6,46 +6,26 @@ import java.util.List;
 
 public class TransactionModel implements Serializable {
 
-    private UserModel user;
-    private CompanyModel company;
-    private LocalDateTime dateTime;
-    private List<ProductModel> products;
-
-    public TransactionModel(UserModel user, CompanyModel company, LocalDateTime dateTime, List<ProductModel> products){
-        this.user = user;
-        this.company = company;
-        this.dateTime = dateTime;
-        this.products = products;
-    }
+    private final UserModel user;
+    private final LocalDateTime dateTime;
+    private final List<CartItem> cartItems;
 
     public UserModel getUser() {
         return user;
     }
 
-    public void setUser(UserModel user) {
-        this.user = user;
-    }
-    public CompanyModel getCompany() {
-        return company;
-    }
-
-    public void setCompany(CompanyModel company) {
-        this.company = company;
+    public List<CartItem> getCartItems() {
+        return cartItems;
     }
 
     public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+    public TransactionModel(UserModel user, LocalDateTime dateTime, List<CartItem> cartItems){
+        this.user = user;
         this.dateTime = dateTime;
+        this.cartItems = cartItems;
     }
 
-    public List<ProductModel> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<ProductModel> products) {
-        this.products = products;
-    }
 }

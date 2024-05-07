@@ -1,4 +1,4 @@
-package com.example.swifty.utils;
+package com.example.swifty.utils.coordinates;
 
 public class CoordinatesCalculator {
 

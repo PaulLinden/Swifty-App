@@ -1,19 +1,23 @@
 package com.example.swifty.fragments;
 
-import java.util.ArrayList;
-import java.util.List;
+import static com.example.swifty.utils.coordinates.CoordinatesCalculator.calculateDistance;
+import static com.example.swifty.utils.coordinates.CoordinatesCalculator.calculateMidpoint;
+import static com.example.swifty.utils.Endpoints.getTransactionUrl;
+import static com.example.swifty.utils.handlers.MapHandler.setUpMap;
+import static com.example.swifty.utils.Message.createMessage;
+import static com.example.swifty.utils.Message.createMessageAndNavigate;
+import static com.example.swifty.utils.Repository.makeTransaction;
+import static com.example.swifty.utils.handlers.TransactionHandler.createTransaction;
+import static com.example.swifty.utils.strings.DeliverStrings.getStrings;
 
-import android.Manifest;
-import android.graphics.drawable.Drawable;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,148 +26,105 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.swifty.R;
 import com.example.swifty.activities.MainActivity;
 import com.example.swifty.adapters.CartAdapter;
-import com.example.swifty.models.CartItem;
-import com.example.swifty.utils.CoordinatesCalculator;
-import com.example.swifty.utils.MyLocation;
+import com.example.swifty.managers.UserSessionManager;
+import com.example.swifty.models.TransactionModel;
+import com.example.swifty.utils.coordinates.MyLocation;
+import com.example.swifty.utils.strings.DeliverStrings;
 import com.example.swifty.view_models.CartViewModel;
 
-import org.osmdroid.bonuspack.routing.OSRMRoadManager;
-import org.osmdroid.bonuspack.routing.Road;
-import org.osmdroid.bonuspack.routing.RoadManager;
+import org.json.JSONException;
 import org.osmdroid.config.Configuration;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.Polyline;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class DeliverFragment extends Fragment implements MyLocation.OnLocationReceivedCallback {
-
-    private static final int REQUEST_LOCATION_PERMISSION = 101;
-    private GeoPoint startPoint, endPoint, midPoint;
-    private MapView mapView;
-    private Drawable person;
     private CartViewModel cartViewModel;
     private CartAdapter cartAdapter;
+    private UserSessionManager sessionManager;
+    private String transactionUrl = null;
+    private Context context;
+    private MainActivity activity;
+    private MapView mapView;
 
     public DeliverFragment() {
-    }
-
-    public static DeliverFragment newInstance() {
-        DeliverFragment fragment = new DeliverFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cartViewModel = new ViewModelProvider(requireActivity()).get(CartViewModel.class);
+        context = requireContext();
+        activity = (MainActivity) requireActivity();
+        cartViewModel = new ViewModelProvider(activity).get(CartViewModel.class);
         cartAdapter = new CartAdapter(new ArrayList<>()); // Initialize with an empty list
+        sessionManager = new UserSessionManager(context);
+
+        //Get endpoint
+        try {
+            transactionUrl = getTransactionUrl(context);
+        } catch (IOException e) {
+            e.fillInStackTrace();
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_deliver, container, false);
+        mapView = view.findViewById(R.id.mapView);
         RecyclerView recyclerView = view.findViewById(R.id.checkOutRecyclerView);
-        MainActivity activity = (MainActivity) requireActivity();
         Button closeButton = view.findViewById(R.id.closeButton);
+        MyLocation.getMyCoordinates(context, DeliverFragment.this);
+        Configuration.getInstance().load(getContext(), androidx.preference.PreferenceManager.getDefaultSharedPreferences(context));
+        DeliverStrings deliverStrings = getStrings();
 
         //Hide navbar
-        requireActivity().runOnUiThread(() -> {
-            activity.setBottomNavigationBarVisibility(false, activity.bottomNavigationView);
-        });
-        //On close got to home and display navbar again
-        closeButton.setOnClickListener((v)->{
+        activity.runOnUiThread(() -> activity.setBottomNavigationBarVisibility(false, activity.bottomNavigationView));
+        //On close empty cart, got to home and display navbar again
+        closeButton.setOnClickListener((v) -> {
+            cartViewModel.emptyCart();
             Navigation.findNavController(v).navigate(R.id.action_deliverFragment_to_companyDetailFragment2);
-            activity.setBottomNavigationBarVisibility(true, activity.bottomNavigationView);
         });
-
-        //Get Icon
-        person = ContextCompat.getDrawable(requireContext(), org.osmdroid.library.R.drawable.person);
-        //Get Map
-        mapView = view.findViewById(R.id.mapView);
-
-        //Request permission to use location
-        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
-
-        //Get users location
-        MyLocation.getMyCoordinates(requireContext(), DeliverFragment.this);
-        Configuration.getInstance().load(getContext(), androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext()));
-
-
-        //Set checkout list...............
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        //Set layout
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
         // Set adapter to RecyclerView
         recyclerView.setAdapter(cartAdapter);
-
         // Observe changes to the cart items LiveData
         cartViewModel.getCartItemsLiveData().observe(getViewLifecycleOwner(), cartItems -> {
             cartAdapter.setCartItems(cartItems); // Update adapter with new data
+            TransactionModel transactionModel = createTransaction(sessionManager, cartItems);
+            new Thread(() -> {
+                int action = R.id.action_deliverFragment_to_companyDetailFragment2;
+                try {
+                    if (makeTransaction(transactionModel, transactionUrl)) {//If transaction is successful
+                        createMessage(context, activity, deliverStrings.completeTitle(), deliverStrings.completeParagraph());
+                    } else {//If transaction fails
+                        createMessageAndNavigate(view, action, context, activity, deliverStrings.errorTitle(), deliverStrings.errorParagraph());
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }).start();
         });
-
         return view;
     }
 
     @Override
     public void onLocationReceived(double latitude, double longitude) {
         //Mock of getting position of delivery
-        double mockLat = 55.55367;
-        double mockLong = 12.99403;
+        double mockLat = 55.55367, mockLong = 12.99403;
         //Calculate midpoint of coordinates
-        double[] calcMidpoint = CoordinatesCalculator.calculateMidpoint(latitude,longitude,mockLat,mockLong);
-        double distanceKm = CoordinatesCalculator.calculateDistance(latitude,longitude,mockLat,mockLong);
+        double[] calcMidpoint = calculateMidpoint(latitude, longitude, mockLat, mockLong);
+        double distanceKm = calculateDistance(latitude, longitude, mockLat, mockLong);
         //Zoom
         long zoomTime = 5000L;
         double zoom = distanceKm * 2.85;// Needs to scale dependent on the distance
-
         //Start point is user position and endPoint is delivery's position
-        startPoint = new GeoPoint(latitude, longitude);
-        endPoint = new GeoPoint(mockLat, mockLong);
-        midPoint = new GeoPoint(calcMidpoint[0],calcMidpoint[1]);
-
-
+        GeoPoint startPoint = new GeoPoint(latitude, longitude),
+                endPoint = new GeoPoint(mockLat, mockLong),
+                midPoint = new GeoPoint(calcMidpoint[0], calcMidpoint[1]);
         // Start a new thread to perform network operation
-        new Thread(() -> {
-            //Get map route
-            RoadManager roadManager = new OSRMRoadManager(requireContext(), "swifty/1.0-beta (Android)");
-            ArrayList<GeoPoint> waypoints = new ArrayList<>();
-            waypoints.add(startPoint);
-            waypoints.add(endPoint);
-
-            final Road road = roadManager.getRoad(waypoints);
-
-            // Update UI on the main thread
-            mapView.post(() -> {
-                //Set marker for users current position
-                Marker marker = new Marker(mapView);
-                marker.setPosition(startPoint);
-                marker.setTitle("User Location");
-                marker.setIcon(person);
-                marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-                mapView.getOverlays().add(marker);
-
-                mapView.getController().animateTo(midPoint,zoom,zoomTime);
-                mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
-                mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
-                mapView.setMultiTouchControls(true);
-
-                if (road != null) {
-                    //Set marker for users current position
-                    Marker delMarker = new Marker(mapView);
-                    delMarker.setPosition(endPoint);
-                    delMarker.setTitle("Delivery Location");
-                    delMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-                    mapView.getOverlays().add(delMarker);
-                    //Display road overlay
-                    Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
-                    mapView.getOverlays().add(roadOverlay);
-                    mapView.getController().setCenter(startPoint);
-                    mapView.invalidate();
-                }
-            });
-        }).start();
+        new Thread(() -> setUpMap(context, mapView, startPoint, endPoint, midPoint, zoom, zoomTime)).start();
     }
 }

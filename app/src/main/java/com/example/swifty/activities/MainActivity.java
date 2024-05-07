@@ -1,12 +1,11 @@
 package com.example.swifty.activities;
 
-import android.content.res.ColorStateList;
+import android.Manifest;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcher;
-import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -18,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_LOCATION_PERMISSION = 101;
     private NavController navController;
     public BottomNavigationView bottomNavigationView;
 
@@ -34,9 +34,7 @@ public class MainActivity extends AppCompatActivity {
         // Setup for bottom navigation bar
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
-
         OnBackPressedDispatcher onBackPressedDispatcher = this.getOnBackPressedDispatcher();
-
         onBackPressedDispatcher.addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -48,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         bottomNavigationView.setVisibility(View.GONE);
+
+        //Request permission to use location
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
     }
 
     @Override

@@ -1,10 +1,9 @@
 package com.example.swifty.fragments;
 
+import static com.example.swifty.utils.strings.ShopStrings.getStrings;
+
+import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,47 +12,45 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.bumptech.glide.Glide;
 import com.example.swifty.R;
+import com.example.swifty.activities.MainActivity;
 import com.example.swifty.models.CartItem;
-import com.example.swifty.view_models.CartViewModel;
 import com.example.swifty.models.CompanyModel;
+import com.example.swifty.utils.Constants;
+import com.example.swifty.utils.strings.ShopStrings;
+import com.example.swifty.view_models.CartViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ShopFragment extends Fragment {
 
-    CompanyModel company;
+    private CompanyModel company;
     private CartViewModel cartViewModel;
+    private Context context;
+    MainActivity activity;
 
     public ShopFragment() {
-    }
-
-    public static ShopFragment newInstance() {
-        ShopFragment fragment = new ShopFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        activity = (MainActivity) requireActivity();
+        context = requireContext();
         // Initialize ViewModel
-        cartViewModel = new ViewModelProvider(requireActivity()).get(CartViewModel.class);
-
+        cartViewModel = new ViewModelProvider(activity).get(CartViewModel.class);
         if (getArguments() != null) {
             System.out.println(getArguments());
             try {
-                company = (CompanyModel) getArguments().getSerializable("company");
-
-                if (company != null) {
-                    System.out.println("Company Name: " + company.getName());
-                }
+                company = (CompanyModel) getArguments().getSerializable(Constants.COMPANY);
             } catch (Exception e) {
-                e.printStackTrace();
+                e.fillInStackTrace();
             }
         }
     }
@@ -62,79 +59,65 @@ public class ShopFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_company, container, false);
-
-        TextView companyName = view.findViewById(R.id.usernameTextView);
-        ImageView companyImg = view.findViewById(R.id.companyImageView);
+        ImageView companyImageView = view.findViewById(R.id.companyImageView);
         LinearLayout productContainer = view.findViewById(R.id.productContainer);
-
-        companyName.setText(company.getName());
-        Glide.with(this).load(company.getUrl()).into(companyImg);
-
-
+        //Set navbar visible
+        activity.runOnUiThread(() -> activity.setBottomNavigationBarVisibility(true, activity.bottomNavigationView));
+        //Load image in to imageview
+        Glide.with(this).load(company.getUrl()).into(companyImageView);
         // Iterate over the product list and add views for each product
         for (String product : company.getProductList()) {
             try {
-                // Parse the JSON string for the product information
                 JSONObject productInfo = new JSONObject(product);
-                String productName = productInfo.getString("name");
-                String quantity = productInfo.getString("quantity");
-                String price = productInfo.getString("price");
-
-                // Create a new LinearLayout to hold the TextViews for each product
-                LinearLayout productLayout = new LinearLayout(requireContext());
-                productLayout.setOrientation(LinearLayout.VERTICAL);
-
-                // Create TextViews for product name, price, and quantity
-                TextView productNameTextView = new TextView(requireContext());
-                productNameTextView.setText("Product: " + productName);
-
-                TextView priceTextView = new TextView(requireContext());
-                priceTextView.setText("Price: $" + price);
-
-                TextView quantityTextView = new TextView(requireContext());
-                quantityTextView.setText("Quantity: " + quantity);
-
-                // Create an "Add" button for each product
-                Button addButton = new Button(requireContext());
-                addButton.setText("Add");
-
-                addButton.setOnClickListener(v -> {
-                    // Create a new CartItem and add it to the cart
-                    CartItem cartItem = new CartItem(productName, Double.parseDouble(price) , 1);
-                    cartViewModel.addToCart(cartItem);
-                });
-
-                // Set margins between button and text
+                String productName = productInfo.getString(Constants.NAME),
+                        quantity = productInfo.getString(Constants.QUANTITY),
+                        price = productInfo.getString(Constants.PRICE);
                 LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.MATCH_PARENT
                 );
-                buttonParams.topMargin = 30; // Adjust the top margin as needed
-                addButton.setLayoutParams(buttonParams);
-
-                // Add TextViews to the product layout
-                productLayout.addView(productNameTextView);
-                productLayout.addView(priceTextView);
-                productLayout.addView(quantityTextView);
-
-                // Add the "Add" button to the product layout
-                productLayout.addView(addButton);
-
-                // Set margins for the product layout
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 );
+                TextView productNameTextView = new TextView(context),
+                        priceTextView = new TextView(context),
+                        quantityTextView = new TextView(context);
+                LinearLayout productLayout = new LinearLayout(context);
+                ShopStrings shopStrings = getStrings(productName, price, quantity);
+                Button addButton = new Button(context);
+                //Set text for fields
+                productNameTextView.setText(shopStrings.productText());
+                priceTextView.setText(shopStrings.priceText());
+                quantityTextView.setText(shopStrings.quantityText());
+                // Create an "Add" button for each product
+                addButton.setText(shopStrings.add());
+                addButton.setOnClickListener(v -> {
+                    // Create a new CartItem and add it to the cart
+                    CartItem cartItem = new CartItem(company.getCompanyName(), productName, Double.parseDouble(price), 1);
+                    cartViewModel.addToCart(cartItem);
+                });
+                // Set margins between button and text
+                buttonParams.topMargin = 30; // Adjust the top margin as needed
+                addButton.setLayoutParams(buttonParams);
+                addButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.light_green, null));
+                addButton.setTextColor(ResourcesCompat.getColor(getResources(), R.color.dark_blue, null));
+                // Add TextViews to the product layout
+                productLayout.setOrientation(LinearLayout.VERTICAL);
+                productLayout.addView(productNameTextView);
+                productLayout.addView(priceTextView);
+                productLayout.addView(quantityTextView);
+                // Add the "Add" button to the product layout
+                productLayout.addView(addButton);
+                // Set margins for the product layout
                 layoutParams.setMargins(0, 40, 0, 40); // Set margins (left, top, right, bottom)
                 productLayout.setLayoutParams(layoutParams);
-
                 // Add the product layout to the product container
                 productContainer.addView(productLayout);
             } catch (JSONException e) {
-                e.printStackTrace();
+                e.fillInStackTrace();
             }
         }
-
 
         return view;
     }
