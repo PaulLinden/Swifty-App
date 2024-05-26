@@ -21,6 +21,7 @@ public class Message {
     public static void createMessageAndNavigate(View view, int action, Context context, FragmentActivity activity, String title, String message) {
         activity.runOnUiThread(() -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setCancelable(false);
             builder.setTitle(title).setMessage(message);
             builder.setPositiveButton("OK", (dialog, which) -> {
                 dialog.dismiss();

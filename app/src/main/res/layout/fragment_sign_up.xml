@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.SignUpFragment">
+
+    <LinearLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/rounded_corners_top"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.404">
+
+        <TextView
+            android:id="@+id/bannerTextView"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:paddingHorizontal="24dp"
+            android:textAlignment="center"
+            android:text="@string/please_check_your_input"
+            android:textColor="@color/error_color"
+            android:visibility="invisible"
+            android:textSize="24sp" />
+
+        <!-- Username  -->
+        <TextView
+            android:id="@+id/usernameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_gravity="start"
+            android:gravity="start"
+            android:text="@string/username"
+            android:labelFor="@+id/usernameLabel"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/usernameTextView"
+            android:layout_width="309dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="10dp"
+            android:autofillHints="username"
+            android:hint="@string/username"
+            android:background="@drawable/round_corners_black_border"
+            android:inputType="text"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="5dp"
+            android:textColor="@color/dark_blue"
+            android:textSize="24sp" />
+
+        <!-- Email  -->
+        <TextView
+            android:id="@+id/emailLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_gravity="start"
+            android:gravity="start"
+            android:text="@string/email"
+            android:labelFor="@id/emailTextView"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/emailTextView"
+            android:layout_width="309dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="10dp"
+            android:autofillHints="emailAddress"
+            android:hint="@string/email"
+            android:background="@drawable/round_corners_black_border"
+            android:inputType="textEmailAddress"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="5dp"
+            android:textColor="@color/dark_blue"
+            android:textSize="24sp" />
+
+        <!-- Password  -->
+        <TextView
+            android:id="@+id/passwordLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_gravity="start"
+            android:gravity="start"
+            android:text="@string/password"
+            android:labelFor="@+id/passwordLabel"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/passwordTextView"
+            android:layout_width="309dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="10dp"
+            android:autofillHints="password"
+            android:hint="@string/password"
+            android:background="@drawable/round_corners_black_border"
+            android:inputType="textPassword"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="5dp"
+            android:textColor="@color/dark_blue"
+            android:textSize="24sp" />
+
+        <!-- First name  -->
+        <TextView
+            android:id="@+id/firstNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_gravity="start"
+            android:text="@string/first_name"
+            android:labelFor="@+id/firstNameTextView"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/firstNameTextView"
+            android:layout_width="309dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="10dp"
+            android:autofillHints="firstname"
+            android:hint="@string/first_name"
+            android:background="@drawable/round_corners_black_border"
+            android:inputType="textPersonName"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="5dp"
+            android:textColor="@color/dark_blue"
+            android:textSize="24sp" />
+
+        <!-- Last name  -->
+        <TextView
+            android:id="@+id/lastNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_gravity="start"
+            android:text="@string/last_name"
+            android:labelFor="@+id/lastNameTextView"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/lastNameTextView"
+            android:layout_width="309dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="10dp"
+            android:autofillHints="lastname"
+            android:hint="@string/last_name"
+            android:background="@drawable/round_corners_black_border"
+            android:inputType="textPersonName"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="5dp"
+            android:textColor="@color/dark_blue"
+            android:textSize="24sp" />
+
+        <!-- Birthdate  -->
+        <TextView
+            android:id="@+id/birthDateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_gravity="start"
+            android:text="@string/birthdate"
+            android:labelFor="@+id/birthDateTextView"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/birthDateTextView"
+            android:layout_width="309dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="30dp"
+            android:autofillHints="birthdate"
+            android:hint="@string/birthdate"
+            android:background="@drawable/round_corners_black_border"
+            android:inputType="datetime"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="5dp"
+            android:textColor="@color/dark_blue"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/create_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/light_green"
+            android:textColor="@color/dark_blue"
+            android:text="@string/create_new_account" />
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/light_green"
+            android:textColor="@color/dark_blue"
+            android:text="@string/cancel" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,15 +1,20 @@
 package com.example.swifty.utils;
 
-import com.example.swifty.models.CartItem;
+import android.util.Log;
+
+import com.example.swifty.models.CompanyModel;
 import com.example.swifty.models.TransactionModel;
 import com.example.swifty.models.UserModel;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,117 +23,120 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class Repository {
 
-    public static boolean isValidUser(String usernameInput, String passwordInput, String endpoint, UserModel currentUser) throws JSONException {
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private static final OkHttpClient client = new OkHttpClient();
+    private static final Gson gson = new Gson();
+    public static UserModel getValidUser(String username, String password, String endpoint) {
+        try {
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("username", username);
+            jsonBody.put("password", password);
 
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
+            RequestBody requestBody = RequestBody.create(jsonBody.toString(), JSON);
 
-        JSONObject jsonBody = new JSONObject();
-        jsonBody.put("username", usernameInput);
-        jsonBody.put("password", passwordInput);
+            Request request = new Request.Builder()
+                    .url(endpoint)
+                    .post(requestBody)
+                    .build();
 
-        RequestBody requestBody = RequestBody.create(String.valueOf(jsonBody), JSON);
-
-        Request request = new Request.Builder()
-                .url(endpoint)
-                .post(requestBody)
-                .header("Content-Type", "application/json")
-                .build();
-
-        try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful()) {
+            try (Response response = client.newCall(request).execute()) {
+                if (!response.isSuccessful()) return null;
                 assert response.body() != null;
-                String responseBody = response.body().string();
-                JSONObject jsonData = new JSONObject(responseBody);
-
-                //Create user object with the fetched user data
-                currentUser.setId(jsonData.getLong("id"));
-                currentUser.setUserName(jsonData.getString("username"));
-                currentUser.setEmail(jsonData.getString("email"));
-                currentUser.setFirstName(jsonData.getString("name"));
-                currentUser.setLastName(jsonData.getString("lastName"));
-                currentUser.setBirthDate(jsonData.getString("birtDate"));
-
-                return true;
-            } else {
-                return false;
+                return gson.fromJson(response.body().string(), UserModel.class);
             }
-        } catch (IOException | JSONException e) {
-            e.fillInStackTrace();
-            return false;
-        }
-    }
-
-    public static boolean makeTransaction(TransactionModel transaction, String endpoint) throws JSONException {
-
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-
-        //Create request body
-        JSONObject jsonBody = new JSONObject();
-        //User
-        jsonBody.put("userId", transaction.getUser().getId());
-        jsonBody.put("userEmail", transaction.getUser().getEmail());
-        //Time of transaction
-        jsonBody.put("dateTime", transaction.getDateTime());
-        //Items in cart
-        JSONArray cartItemsArray = new JSONArray();
-        for (CartItem cartItem : transaction.getCartItems()) {
-            JSONObject cartItemJson = new JSONObject();
-            cartItemJson.put("name", cartItem.getProductName());
-            cartItemJson.put("companyName", cartItem.getCompanyName());
-            cartItemJson.put("price", cartItem.getPrice());
-            cartItemJson.put("quantity", cartItem.getQuantity());
-            cartItemsArray.put(cartItemJson);
-        }
-        jsonBody.put("cartItems", cartItemsArray);
-
-        RequestBody requestBody = RequestBody.create(String.valueOf(jsonBody), JSON);
-
-        System.out.println(jsonBody);
-        //Build request
-        Request request = new Request.Builder()
-                .url(endpoint)
-                .post(requestBody)
-                .header("Content-Type", "application/json")
-                .build();
-        System.out.println(request);
-        //Get response status
-        try (Response response = client.newCall(request).execute()) {
-            return response.isSuccessful();
-        } catch (IOException e) {
-            e.fillInStackTrace();
-            return false;
-        }
-    }
-
-    public static List<JSONObject> getCompanyData(String endpoint) {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(endpoint)
-                .header("Content-Type", "application/json")
-                .build();
-        try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful()) {
-                assert response.body() != null;
-                String responseBody = response.body().string();
-                JSONObject jsonData = new JSONObject(responseBody);
-                Iterator<String> companyKeys = jsonData.keys();
-                List<JSONObject> companyList = new ArrayList<>(); // Create a list to store company objects
-                while (companyKeys.hasNext()) {
-                    String key = companyKeys.next(); // Get the next key
-                    JSONObject company = jsonData.getJSONObject(key); // Get the object associated with the key
-                    companyList.add(company); // Add the company object to the list
-                }
-                return companyList;
-            }
-        } catch (IOException | JSONException e) {
-            e.fillInStackTrace();
+        } catch (IOException | JsonSyntaxException | JSONException e) {
+            Log.e("NetworkError", "Error validating user", e);
             return null;
         }
-        return null;
     }
+    public static boolean isSuccessfulTransaction(TransactionModel transaction, String endpoint) throws IOException {
+        String jsonBody = gson.toJson(transaction);
+        // For debugging, print formatted JSON
+        Gson gsonPrettyPrinting = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(gsonPrettyPrinting.toJson(transaction));
+
+        RequestBody requestBody = RequestBody.create(jsonBody, JSON);
+
+        Request request = new Request.Builder()
+                .url(endpoint)
+                .post(requestBody)
+                .header("Content-Type", "application/json") // Essential for some APIs
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+
+            if (!response.isSuccessful()) {
+                assert response.body() != null;
+                System.out.println("Error Response Body: " + response.body().string());
+            }
+
+            return response.isSuccessful();
+        }
+    }
+    public static List<CompanyModel> getCompanyData(String endpoint) {
+        Request request = new Request.Builder()
+                .url(endpoint)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) return Collections.emptyList();
+
+            ResponseBody responseBody = response.body();
+            if (responseBody != null) {
+                JSONObject jsonData = new JSONObject(responseBody.string());
+
+                List<CompanyModel> companies = new ArrayList<>();
+                Iterator<String> companyKeys = jsonData.keys();
+                while (companyKeys.hasNext()) {
+                    String companyName = companyKeys.next();
+                    // Get the data for this company
+                    JSONObject companyData = jsonData.getJSONObject(companyName);
+                    // Extract company details
+                    String url = companyData.getJSONObject("info").getString("url");
+                    // Extract product names into a list
+                    JSONObject productList = companyData.getJSONObject("productList");
+                    List<String> products = new ArrayList<>();
+                    Iterator<String> productKeys = productList.keys();
+                    while (productKeys.hasNext()) {
+                        String productId = productKeys.next();
+                        products.add(productList.getString(productId)); // Just get the name
+                    }
+                    // Create the CompanyModel object and add it to the list
+                    companies.add(new CompanyModel(companyName, url, products));
+                }
+
+                return companies;
+            } else {
+                Log.e("NetworkError", "Empty response body received.");
+                return Collections.emptyList();
+            }
+        } catch (IOException | JSONException e) {
+            Log.e("NetworkError", "Error fetching company data: " + e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+    public static boolean createUser(String endpoint, UserModel user) {
+        try {
+            String jsonBody = gson.toJson(user); // Use Gson for serialization
+            RequestBody requestBody = RequestBody.create(jsonBody, JSON);
+            System.out.println(jsonBody);
+            Request request = new Request.Builder()
+                    .url(endpoint)
+                    .post(requestBody)
+                    .build();
+
+            try (Response response = client.newCall(request).execute()) {
+                System.out.println(response);
+                return response.isSuccessful();
+            }
+        } catch (IOException e) {
+            Log.e("NetworkError", "Error creating user", e);
+            return false;
+        }
+    }
+
 }

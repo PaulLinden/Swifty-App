@@ -6,4 +6,5 @@
     <color name="mid_grey">#555555</color>
     <color name="light_green">#01C38E</color>
     <color name="dark_blue">#1A1E29</color>
+    <color name="error_color">#FFFF0000</color>
 </resources>

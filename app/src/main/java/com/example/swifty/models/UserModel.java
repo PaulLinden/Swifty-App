@@ -6,17 +6,21 @@ public class UserModel implements Serializable {
 
     private Long id;
     private String email;
-    private String userName;
+    private String username;
     private String firstName;
     private String lastName;
-    private String birthDate;
+    private String birthdate;
+    private String password;
 
-    public String getUserName() {
-        return userName;
+    public UserModel() {
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -51,11 +55,19 @@ public class UserModel implements Serializable {
         this.lastName = lastName;
     }
 
-    public String getBirthDate() {
-        return birthDate;
+    public String getBirthdate() {
+        return birthdate;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

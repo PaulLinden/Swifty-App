@@ -2,13 +2,7 @@ package com.example.swifty.fragments;
 
 import static com.example.swifty.utils.coordinates.CoordinatesCalculator.calculateDistance;
 import static com.example.swifty.utils.coordinates.CoordinatesCalculator.calculateMidpoint;
-import static com.example.swifty.utils.Endpoints.getTransactionUrl;
 import static com.example.swifty.utils.handlers.MapHandler.setUpMap;
-import static com.example.swifty.utils.Message.createMessage;
-import static com.example.swifty.utils.Message.createMessageAndNavigate;
-import static com.example.swifty.utils.Repository.makeTransaction;
-import static com.example.swifty.utils.handlers.TransactionHandler.createTransaction;
-import static com.example.swifty.utils.strings.DeliverStrings.getStrings;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -26,25 +20,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.swifty.R;
 import com.example.swifty.activities.MainActivity;
 import com.example.swifty.adapters.CartAdapter;
-import com.example.swifty.managers.UserSessionManager;
-import com.example.swifty.models.TransactionModel;
 import com.example.swifty.utils.coordinates.MyLocation;
-import com.example.swifty.utils.strings.DeliverStrings;
 import com.example.swifty.view_models.CartViewModel;
 
-import org.json.JSONException;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class DeliverFragment extends Fragment implements MyLocation.OnLocationReceivedCallback {
     private CartViewModel cartViewModel;
     private CartAdapter cartAdapter;
-    private UserSessionManager sessionManager;
-    private String transactionUrl = null;
     private Context context;
     private MainActivity activity;
     private MapView mapView;
@@ -58,15 +45,7 @@ public class DeliverFragment extends Fragment implements MyLocation.OnLocationRe
         context = requireContext();
         activity = (MainActivity) requireActivity();
         cartViewModel = new ViewModelProvider(activity).get(CartViewModel.class);
-        cartAdapter = new CartAdapter(new ArrayList<>()); // Initialize with an empty list
-        sessionManager = new UserSessionManager(context);
-
-        //Get endpoint
-        try {
-            transactionUrl = getTransactionUrl(context);
-        } catch (IOException e) {
-            e.fillInStackTrace();
-        }
+        cartAdapter = new CartAdapter(new ArrayList<>());
     }
 
     @Override
@@ -77,7 +56,6 @@ public class DeliverFragment extends Fragment implements MyLocation.OnLocationRe
         Button closeButton = view.findViewById(R.id.closeButton);
         MyLocation.getMyCoordinates(context, DeliverFragment.this);
         Configuration.getInstance().load(getContext(), androidx.preference.PreferenceManager.getDefaultSharedPreferences(context));
-        DeliverStrings deliverStrings = getStrings();
 
         //Hide navbar
         activity.runOnUiThread(() -> activity.setBottomNavigationBarVisibility(false, activity.bottomNavigationView));
@@ -93,19 +71,6 @@ public class DeliverFragment extends Fragment implements MyLocation.OnLocationRe
         // Observe changes to the cart items LiveData
         cartViewModel.getCartItemsLiveData().observe(getViewLifecycleOwner(), cartItems -> {
             cartAdapter.setCartItems(cartItems); // Update adapter with new data
-            TransactionModel transactionModel = createTransaction(sessionManager, cartItems);
-            new Thread(() -> {
-                int action = R.id.action_deliverFragment_to_companyDetailFragment2;
-                try {
-                    if (makeTransaction(transactionModel, transactionUrl)) {//If transaction is successful
-                        createMessage(context, activity, deliverStrings.completeTitle(), deliverStrings.completeParagraph());
-                    } else {//If transaction fails
-                        createMessageAndNavigate(view, action, context, activity, deliverStrings.errorTitle(), deliverStrings.errorParagraph());
-                    }
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            }).start();
         });
         return view;
     }

@@ -26,4 +26,9 @@
     <string name="close">Close</string>
     <string name="brand_img">brand_img</string>
     <string name="company">Company</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cancel">Cancel</string>
+    <string name="create_new_account">Create new account</string>
+    <string name="please_check_your_input">Please check your input</string>
 </resources>

@@ -5,6 +5,7 @@ import static com.example.swifty.utils.Repository.getCompanyData;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +22,9 @@ import com.example.swifty.activities.MainActivity;
 import com.example.swifty.models.CompanyModel;
 import com.example.swifty.utils.Constants;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
@@ -45,11 +42,7 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) requireActivity();
-        try {
-            companyUrl = getCompanyUrl(this.requireContext());
-        } catch (IOException e) {
-            e.fillInStackTrace();
-        }
+        companyUrl = getCompanyUrl(this.requireContext());
     }
 
     @Override
@@ -64,60 +57,38 @@ public class HomeFragment extends Fragment {
         //Set navbar visible
         activity.runOnUiThread(() -> activity.setBottomNavigationBarVisibility(true, activity.bottomNavigationView));
         //Get company data
-        Thread dataThread = new Thread(() -> {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(() -> {
             try {
-                List<JSONObject> companyList = getCompanyData(companyUrl);
-                int index = 0;
-                assert companyList != null;
-                for (JSONObject company : companyList) {
-                    //Json objects info and product list
-                    JSONObject info = company.getJSONObject(Constants.INFO),
-                            productList = company.getJSONObject(Constants.PRODUCT_LIST);
-                    //Company specifics
-                    String companyName = info.getString(Constants.NAME),
-                            url = info.getString(Constants.URL);
-                    // Initialize a list to hold the products and img-urls
-                    List<String> products = new ArrayList<>();
-                    // Iterate over the keys of the "productList" object
-                    Iterator<String> keys = productList.keys();
-                    while (keys.hasNext()) {
-                        // Get the key (product name)
-                        String key = keys.next();
-                        // Add the product to the list
-                        products.add(productList.getString(key));
-                    }
-                    //Init company object
-                    CompanyModel newCompany = new CompanyModel(companyName, url, products);
-                    //Update UI
-                    int finalIndex = index;
+                List<CompanyModel> companyList = getCompanyData(companyUrl); // Use the new method
+                System.out.println(companyList.size());
+                for (int i = 0; i < companyList.size(); i++) {
+                    CompanyModel company = companyList.get(i);
+                    String url = company.getUrl();
+
+                    int finalIndex = i;
                     activity.runOnUiThread(() -> {
-                        //Load image into imageview
                         Glide.with(this)
                                 .load(url)
                                 .apply(RequestOptions.bitmapTransform(transformation))
                                 .into(views[finalIndex]);
-                        //Make images clickable
+
                         views[finalIndex].setOnClickListener(v -> {
                             ShopFragment fragment = new ShopFragment();
                             Bundle args = new Bundle();
-                            args.putSerializable(Constants.COMPANY, newCompany);
+                            args.putSerializable(Constants.COMPANY, company); // Pass the CompanyModel directly
                             fragment.setArguments(args);
                             activity.runOnUiThread(() -> Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_companyDetailFragment, args));
                         });
                     });
-                    index++;
                 }
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) { // Catch a more general Exception type if needed
+                Log.e("DataError", "Error fetching or processing company data", e);
+            } finally {
+                executor.shutdown(); // Ensure executor shutdown
             }
         });
-        dataThread.start();
-        //Waits for this thread to die.
-        try {
-            dataThread.join();
-        } catch (InterruptedException e) {
-            e.fillInStackTrace();
-        }
+
         return view;
     }
 }

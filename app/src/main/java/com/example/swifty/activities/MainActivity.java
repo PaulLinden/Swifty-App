@@ -16,7 +16,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.swifty.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.IOException;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,11 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        try {
-            initBaseUrl(this);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        initBaseUrl(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
