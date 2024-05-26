@@ -19,6 +19,11 @@ import com.example.swifty.R;
 import com.example.swifty.activities.MainActivity;
 import com.example.swifty.managers.UserSessionManager;
 
+/*
+* This fragment is used to display user profile. For now only the user credentials are displayed.
+* Later on the functionality for the profile image will be implemented.
+* */
+
 public class ProfileFragment extends Fragment {
 
     private UserSessionManager sessionManager;
@@ -37,15 +42,20 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        //Get activity
         MainActivity activity = (MainActivity) requireActivity();
+        //Get profile image
         ImageView profileImg = view.findViewById(R.id.profileImageView);
+        //Create multi transformation
         MultiTransformation<Bitmap> multiTransformation = new MultiTransformation<>(new CircleCrop());
+        //Get user credentials
         String[] credentials = sessionManager.getUserCredentials();
         String username = credentials[1],
                 firstName = credentials[2],
                 lastName = credentials[3],
                 email = credentials[4],
                 birthDate = credentials[5];
+        //Get text views
         TextView nameText = view.findViewById(R.id.usernameTextView),
                 emailText = view.findViewById(R.id.emailTextView),
                 birthDateText = view.findViewById(R.id.birthDateTextView),
@@ -57,7 +67,6 @@ public class ProfileFragment extends Fragment {
         firstNameText.setText(firstName);
         lastNameText.setText(lastName);
         birthDateText.setText(birthDate);
-
         //Set navbar visible
         activity.runOnUiThread(() -> activity.setBottomNavigationBarVisibility(true, activity.bottomNavigationView));
         //Set placeholder image for profile

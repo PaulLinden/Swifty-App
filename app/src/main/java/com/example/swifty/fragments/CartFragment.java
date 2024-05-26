@@ -28,9 +28,16 @@ import com.example.swifty.models.TransactionModel;
 import com.example.swifty.utils.strings.DeliverStrings;
 import com.example.swifty.view_models.CartViewModel;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+/*
+* Cart Fragment to display cart items and checkout button.
+* Uses CartViewModel to get cart items and submit transaction
+* and cartAdapter to display cart items.
+* */
 
 public class CartFragment extends Fragment {
     private UserSessionManager sessionManager;
@@ -45,6 +52,7 @@ public class CartFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Initialize variables
         activity = (MainActivity) requireActivity();
         context = requireContext();
         sessionManager = new UserSessionManager(context);
@@ -57,9 +65,11 @@ public class CartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
+        //Initialize variables
         Button checkOut = view.findViewById(R.id.checkoutButton);
         RecyclerView recyclerView = view.findViewById(R.id.cartRecyclerView);
         DeliverStrings deliverStrings = getStrings();
+        //Set bottom navigation bar visibility
         activity.runOnUiThread(() -> activity.setBottomNavigationBarVisibility(true, activity.bottomNavigationView));
 
         // Set layout for RecyclerView
@@ -75,14 +85,18 @@ public class CartFragment extends Fragment {
 
         //Check out on click
         checkOut.setOnClickListener((v) -> activity.runOnUiThread(() -> {
+            //Check if cart is empty
             if (cart == null) {
                 createMessage(context, activity, "Empty.", "Your cart is empty.");
             } else {
+                //Create transaction
                 TransactionModel transactionModel = createTransaction(sessionManager, cart);
-                System.out.println(transactionModel.getDateTime());
-                new Thread(() -> {
+                //Submit transaction
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.submit(() -> {
                     try {
-                        if (isSuccessfulTransaction(transactionModel, transactionUrl)) {//If transaction is successful
+                        //If transaction is successful, navigate to deliver fragment
+                        if (isSuccessfulTransaction(transactionModel, transactionUrl)) {
                             createMessageAndNavigate(
                                     view,
                                     R.id.action_cartFragment_to_deliverFragment,
@@ -90,17 +104,21 @@ public class CartFragment extends Fragment {
                                     activity,
                                     deliverStrings.completeTitle(),
                                     deliverStrings.completeParagraph());
-                        } else {//If transaction fails
-                            createMessage(
-                                    context,
-                                    activity,
-                                    deliverStrings.errorTitle(),
-                                    deliverStrings.errorParagraph());
+                        } else {
+                            //If transaction throw error
+                            throw new Exception("Transaction failed.");
                         }
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                    } catch (Exception e) {
+                        //display error
+                        createMessage(
+                                context,
+                                activity,
+                                deliverStrings.errorTitle(),
+                                deliverStrings.errorParagraph());
                     }
-                }).start();
+                });
+                //Shutdown executor
+                executor.shutdown();
             }
         }));
         return view;

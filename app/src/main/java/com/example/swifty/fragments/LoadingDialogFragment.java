@@ -15,6 +15,12 @@ import androidx.fragment.app.DialogFragment;
 import com.example.swifty.R;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
+/*
+* This is the loading dialog fragment. This fragment can be used wherever you
+* want to show a loading dialog. Just declare an instance of this fragment and show() to
+* start the dialog. For closing the dialog, call shutdown().
+* */
+
 public class LoadingDialogFragment extends DialogFragment {
 
     // Singleton instance
@@ -32,6 +38,7 @@ public class LoadingDialogFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate a simple layout containing just the progress indicator
         View view = inflater.inflate(R.layout.fragment_loading_dialog, container, false);
+        // Get a reference to the progress indicator
         CircularProgressIndicator circularProgressIndicator = view.findViewById(R.id.loading_indicator);
         return view;
     }

@@ -28,6 +28,10 @@ import com.example.swifty.view_models.CartViewModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/*
+* Here the specific company is displayed with all the products.
+* The user can add products to the cart.
+* */
 public class ShopFragment extends Fragment {
 
     private CompanyModel company;
@@ -59,6 +63,7 @@ public class ShopFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_company, container, false);
+        //Get views
         ImageView companyImageView = view.findViewById(R.id.companyImageView);
         LinearLayout productContainer = view.findViewById(R.id.productContainer);
         //Set navbar visible
@@ -68,10 +73,13 @@ public class ShopFragment extends Fragment {
         // Iterate over the product list and add views for each product
         for (String product : company.getProductList()) {
             try {
+                // Parse the product JSON object
                 JSONObject productInfo = new JSONObject(product);
+                // Get the product name, price, and quantity
                 String productName = productInfo.getString(Constants.NAME),
                         quantity = productInfo.getString(Constants.QUANTITY),
                         price = productInfo.getString(Constants.PRICE);
+                // Create a new product layout
                 LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.MATCH_PARENT

@@ -29,6 +29,12 @@ import org.osmdroid.views.MapView;
 
 import java.util.ArrayList;
 
+/*
+* This fragment displays the delivery of the order and shows
+* closest route between user and delivery, this is only a mock
+* for now and will be further developed.
+* */
+
 public class DeliverFragment extends Fragment implements MyLocation.OnLocationReceivedCallback {
     private CartViewModel cartViewModel;
     private CartAdapter cartAdapter;
@@ -42,6 +48,7 @@ public class DeliverFragment extends Fragment implements MyLocation.OnLocationRe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Initialize variables
         context = requireContext();
         activity = (MainActivity) requireActivity();
         cartViewModel = new ViewModelProvider(activity).get(CartViewModel.class);
@@ -51,10 +58,13 @@ public class DeliverFragment extends Fragment implements MyLocation.OnLocationRe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_deliver, container, false);
+        //Initialize views
         mapView = view.findViewById(R.id.mapView);
         RecyclerView recyclerView = view.findViewById(R.id.checkOutRecyclerView);
         Button closeButton = view.findViewById(R.id.closeButton);
+        //Get user position
         MyLocation.getMyCoordinates(context, DeliverFragment.this);
+        //Load preferences
         Configuration.getInstance().load(getContext(), androidx.preference.PreferenceManager.getDefaultSharedPreferences(context));
 
         //Hide navbar
@@ -74,7 +84,7 @@ public class DeliverFragment extends Fragment implements MyLocation.OnLocationRe
         });
         return view;
     }
-
+    //Callback for getting user position
     @Override
     public void onLocationReceived(double latitude, double longitude) {
         //Mock of getting position of delivery

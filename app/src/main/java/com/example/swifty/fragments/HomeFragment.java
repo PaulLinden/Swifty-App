@@ -28,6 +28,12 @@ import java.util.concurrent.Executors;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
+/*
+* This is the home fragment of the application. Here the user gets
+* an overview of the company data and can navigate to the
+* specific company that the user wants to see.
+* */
+
 public class HomeFragment extends Fragment {
     private String companyUrl = null;
     MainActivity activity;
@@ -48,6 +54,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        //Get views
         ImageView[] views = {
                 view.findViewById(R.id.image_view1),
                 view.findViewById(R.id.image_view2),
@@ -60,24 +67,27 @@ public class HomeFragment extends Fragment {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(() -> {
             try {
-                List<CompanyModel> companyList = getCompanyData(companyUrl); // Use the new method
-                System.out.println(companyList.size());
+                // Get the company data
+                List<CompanyModel> companyList = getCompanyData(companyUrl);
+                // Set the company data to the ImageView
                 for (int i = 0; i < companyList.size(); i++) {
                     CompanyModel company = companyList.get(i);
                     String url = company.getUrl();
-
+                    // Set the ImageView with the company data
                     int finalIndex = i;
                     activity.runOnUiThread(() -> {
                         Glide.with(this)
                                 .load(url)
                                 .apply(RequestOptions.bitmapTransform(transformation))
                                 .into(views[finalIndex]);
-
+                        // Set click listener for each ImageView
                         views[finalIndex].setOnClickListener(v -> {
                             ShopFragment fragment = new ShopFragment();
                             Bundle args = new Bundle();
-                            args.putSerializable(Constants.COMPANY, company); // Pass the CompanyModel directly
+                            // Pass the company data as a serializable object
+                            args.putSerializable(Constants.COMPANY, company);
                             fragment.setArguments(args);
+                            // Navigate to the ShopFragment
                             activity.runOnUiThread(() -> Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_companyDetailFragment, args));
                         });
                     });

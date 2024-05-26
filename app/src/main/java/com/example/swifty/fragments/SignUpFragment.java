@@ -29,6 +29,9 @@ import com.example.swifty.models.UserModel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/*
+* Fragment to create a new user account.
+* */
 
 public class SignUpFragment extends Fragment {
 
@@ -37,7 +40,6 @@ public class SignUpFragment extends Fragment {
     String createUserUrl = null;
     LoadingDialogFragment loadingDialog = LoadingDialogFragment.getInstance();
     public SignUpFragment() {}
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +61,7 @@ public class SignUpFragment extends Fragment {
                 lastName = view.findViewById(R.id.lastNameTextView),
                 birthdate = view.findViewById(R.id.birthDateTextView),
                 password = view.findViewById(R.id.passwordTextView);
-
+        //Gather inputs to check
         EditText[] inputs = {username, email, password, firstName, lastName, birthdate};
         Button
                 confirmButton = view.findViewById(R.id.create_button),
