@@ -86,7 +86,7 @@
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginPassword"
-        app:layout_constraintVertical_bias="0.136" />
+        app:layout_constraintVertical_bias="0.218" />
 
     <Button
         android:id="@+id/createButton"
@@ -100,8 +100,8 @@
         app:layout_constraintHorizontal_bias="0.497"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginPassword"
-        app:layout_constraintVertical_bias="0.448" />
+        app:layout_constraintTop_toBottomOf="@+id/loginButton"
+        app:layout_constraintVertical_bias="0.129" />
 
     <ImageView
         android:id="@+id/imageView"

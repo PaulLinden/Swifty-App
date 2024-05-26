@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.Navigation;
@@ -34,10 +35,8 @@ public class SignUpFragment extends Fragment {
     FragmentActivity activity;
     Context context;
     String createUserUrl = null;
-
-    public SignUpFragment() {
-        // Required empty public constructor
-    }
+    LoadingDialogFragment loadingDialog = LoadingDialogFragment.getInstance();
+    public SignUpFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +50,7 @@ public class SignUpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
+        //Get views
         TextView errorBanner = view.findViewById(R.id.bannerTextView);
         EditText
                 username = view.findViewById(R.id.usernameTextView),
@@ -61,6 +61,10 @@ public class SignUpFragment extends Fragment {
                 password = view.findViewById(R.id.passwordTextView);
 
         EditText[] inputs = {username, email, password, firstName, lastName, birthdate};
+        Button
+                confirmButton = view.findViewById(R.id.create_button),
+                cancelButton = view.findViewById(R.id.cancel_button);
+        //Add text watcher to birthdate
         birthdate.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -79,14 +83,17 @@ public class SignUpFragment extends Fragment {
                 }
             }
         });
-        Button
-                confirm = view.findViewById(R.id.create_button),
-                cancel = view.findViewById(R.id.cancel_button);
-
+        //Create user
         UserModel newUser = new UserModel();
-        confirm.setOnClickListener(v -> {
+        //Set click listeners
+        confirmButton.setOnClickListener(v -> {
+            //Check inputs
             if (checkInputs(inputs, errorBanner)) {//If all input is valid
-                //Create user
+                //Show loading dialog
+                loadingDialog.show(activity.getSupportFragmentManager(), "loading_dialog");
+                //Disable button
+                confirmButton.setBackgroundColor(ContextCompat.getColor(context, R.color.mid_grey));
+                //Set user data
                 newUser.setEmail(email.getText().toString());
                 newUser.setUsername(username.getText().toString());
                 newUser.setFirstName(firstName.getText().toString());
@@ -97,8 +104,9 @@ public class SignUpFragment extends Fragment {
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.submit(() -> {
                     try {
-                        //Create user
+                        //Send user to server
                         boolean isUserCreated = createUser(createUserUrl, newUser);
+                        //If user is created navigate to login
                         if (isUserCreated) {
                             createMessageAndNavigate(
                                     v,
@@ -107,41 +115,49 @@ public class SignUpFragment extends Fragment {
                                     "Success",
                                     "User created successfully."
                             );
-                        } else {
-                            createMessage(context, activity, "Error", "Something went wrong. Try again later.");
+                        } else {//If user is not created throw error
+                            throw new Exception("User not created");
                         }
                     } catch (Exception e) {
+                        createMessage(context, activity, e.getMessage(), "Something went wrong. Try again later.");
                         Log.e("Error", "Error creating account", e);
                     } finally {
+                        //Enable button
+                        confirmButton.setBackgroundColor(ContextCompat.getColor(context, color.light_green));
+                        //Dismiss loading dialog
+                        loadingDialog.dismiss();
+                        //Shutdown executor
                         executor.shutdown();
                     }
                 });
             }
         });
-
-        cancel.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_signUpFragment_to_loginFragment));
+        //Cancel button set click listener
+        cancelButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_signUpFragment_to_loginFragment));
         return view;
     }
 
+    //Method to check inputs
     private boolean checkInputs(EditText[] inputs, TextView errorBanner) {
         for (EditText input : inputs) {
-            //Field checks.
+            //If input is empty
             if (emptyField(input) ||
                     (input.getId() == R.id.emailTextView && emailField(input)) ||
                     (input.getId() == R.id.passwordTextView && passwordField(input)) ||
                     (input.getId() == R.id.birthDateTextView && birthdateField(input))) {
-                //If error is found
+                //Set error banner
                 errorBanner.setVisibility(View.VISIBLE);
                 return false;
             } else {
                 input.setBackgroundResource(drawable.round_corners_black_border);
             }
         }
-        //If all inputs are valid.
+        //If all inputs are valid
         errorBanner.setVisibility(View.GONE);
         return true;
     }
 
+    //Methods to check input fields
     public boolean emptyField(EditText input) {
         if (input.getText().toString().isEmpty()) {
             input.setError("Field can't be empty");
@@ -150,7 +166,6 @@ public class SignUpFragment extends Fragment {
         }
         return false;
     }
-
     public boolean passwordField(EditText input) {
         if (input.getText().toString().length() < 8) {
             input.setError("Password must be at least 8 characters long");
@@ -159,7 +174,6 @@ public class SignUpFragment extends Fragment {
         }
         return false;
     }
-
     public boolean emailField(EditText input) {
 
         String regex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
@@ -171,7 +185,6 @@ public class SignUpFragment extends Fragment {
         }
         return false;
     }
-
     public boolean birthdateField(EditText input) {
         String regex = "^([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$";
         if (!input.getText().toString().matches(regex)) {
