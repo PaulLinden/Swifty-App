@@ -16,19 +16,17 @@ It's important to note that this project is currently a work in progress, servin
 viable product. Over
 time, it will undergo enhancements to bolster its robustness and scalability.
 
-Current fragments in the app:
+<details open>
+<summary>Current fragments in the app:</summary>
 
-| Sign up                 | Login                    | Home                    |
-| ------------------------ | ------------------------ | ------------------------ |
-|  <img src="./app/screenshots/signup.jpg" alt="Sign up Screen" height="500"> | <img src="./app/screenshots/login.jpg" alt="Login Screen" height="500"> | <img src="./app/screenshots/home.jpg" alt="Home Screen" height="500"> |
+| Sign up | Login | Home | Profile | 
+|---|---|---|---|
+| [![Sign up](./app/screenshots/signup.jpg)](./app/screenshots/signup.jpg) | [![Login](./app/screenshots/login.jpg)](./app/screenshots/login.jpg) | [![Home](./app/screenshots/home.jpg)](./app/screenshots/home.jpg) | [![Profile](./app/screenshots/profile.jpg)](./app/screenshots/profile.jpg) | 
 
-| Profile                 | Shop                    | Cart                    |
-| ------------------------ | ------------------------ | ------------------------ |
-|  <img src="./app/screenshots/profile.jpg" alt="Profile Screen" height="500"> | <img src="./app/screenshots/shop.jpg" alt="Shop Screen" height="500"> | <img src="./app/screenshots/cart.jpg" alt="Cart Screen" height="500"> |
-
-| Profile                 |
-| ------------------------ |
-|  <img src="./app/screenshots/deliver.jpg" alt="Deliver Screen" height="500"> |
+| Shop | Cart | Deliver | Loading |
+|---|---|---|---|
+| [![Shop](./app/screenshots/shop.jpg)](./app/screenshots/shop.jpg) | [![Cart](./app/screenshots/cart.jpg)](./app/screenshots/cart.jpg) | [![Deliver](./app/screenshots/deliver.jpg)](./app/screenshots/deliver.jpg) | [![Loading](./app/screenshots/loading.jpg)](./app/screenshots/loading.jpg) |
+</details>
 
 ## Technical Details
 
