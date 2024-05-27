@@ -43,7 +43,11 @@ public class CartViewModel extends ViewModel {
         // Notify the UI that the cart has changed
         cartItemsLiveData.setValue(cartItems);
     }
-
+    // Remove an item from the cart
+    public void removeFromCart(CartItem cartItem) {
+        cartItems.remove(cartItem);
+        cartItemsLiveData.setValue(cartItems);
+    }
     // Remove all items from the cart
     public void emptyCart() {
         cartItems.clear();

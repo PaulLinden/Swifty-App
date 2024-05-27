@@ -57,7 +57,7 @@ public class CartFragment extends Fragment {
         context = requireContext();
         sessionManager = new UserSessionManager(context);
         cartViewModel = new ViewModelProvider(activity).get(CartViewModel.class);
-        cartAdapter = new CartAdapter(new ArrayList<>());
+        cartAdapter = new CartAdapter(new ArrayList<>(), cartViewModel);
         transactionUrl = getTransactionUrl(context);
     }
 
@@ -85,7 +85,7 @@ public class CartFragment extends Fragment {
         //Check out on click
         checkOut.setOnClickListener((v) -> activity.runOnUiThread(() -> {
             //Check if cart is empty
-            if (cart == null) {
+            if (cart.isEmpty()) {
                 createMessage(context, activity, "Empty.", "Your cart is empty.");
             } else {
                 //Create transaction

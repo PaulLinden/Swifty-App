@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.swifty.R;
 import com.example.swifty.models.CartItem;
+import com.example.swifty.view_models.CartViewModel;
 
 import java.util.List;
 
@@ -23,9 +25,10 @@ import java.util.List;
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
 
     private List<CartItem> cartItems;
-
-    public CartAdapter(List<CartItem> cartItems) {
+    private final CartViewModel cartViewModel;
+    public CartAdapter(List<CartItem> cartItems, CartViewModel cartViewModel) {
         this.cartItems = cartItems;
+        this.cartViewModel = cartViewModel;
     }
 
     @NonNull
@@ -56,17 +59,19 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         notifyDataSetChanged(); // Notify RecyclerView that the dataset has changed
     }
     // ViewHolder class
-    public static class CartViewHolder extends RecyclerView.ViewHolder {
+    public class CartViewHolder extends RecyclerView.ViewHolder {
         // Initialize views
         private final TextView productNameTextView;
         private final TextView priceTextView;
         private final TextView quantityTextView;
+        private final Button removeButton;
         // Constructor
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
             productNameTextView = itemView.findViewById(R.id.productNameTextView);
             priceTextView = itemView.findViewById(R.id.priceTextView);
             quantityTextView = itemView.findViewById(R.id.quantityTextView);
+            removeButton = itemView.findViewById(R.id.removeButton);
         }
         // Bind data to views
         public void bind(CartItem cartItem) {
@@ -78,6 +83,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             priceTextView.setText(context.getString(R.string.quantity, price));
             quantityTextView.setText(context.getString(R.string.quantity, quantity));
 
+            // Remove button click listener
+            removeButton.setOnClickListener(v -> {
+                int currentPosition = getAdapterPosition();
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    cartItems.remove(currentPosition);
+                    cartViewModel.removeFromCart(cartItem);
+                    notifyItemRemoved(currentPosition);
+                }
+            });
         }
     }
 }

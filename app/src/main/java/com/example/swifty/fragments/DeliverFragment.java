@@ -52,7 +52,7 @@ public class DeliverFragment extends Fragment implements MyLocation.OnLocationRe
         context = requireContext();
         activity = (MainActivity) requireActivity();
         cartViewModel = new ViewModelProvider(activity).get(CartViewModel.class);
-        cartAdapter = new CartAdapter(new ArrayList<>());
+        cartAdapter = new CartAdapter(new ArrayList<>(), cartViewModel);
     }
 
     @Override
