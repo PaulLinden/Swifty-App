@@ -55,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
                 if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.deliverFragment) {
                     navController.navigate(R.id.action_deliverFragment_to_companyDetailFragment2);
                     setBottomNavigationBarVisibility(true, bottomNavigationView);
+                }else {
+                    // Default behavior (navigate up or exit the app)
+                    if (!navController.navigateUp()) {
+                        finish(); // Exit the app if no other navigation is possible
+                    }
                 }
             }
         });
@@ -71,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
     }
     //Set bottom navigation bar visibility
     public void setBottomNavigationBarVisibility(boolean isVisible, BottomNavigationView bottomNavigationView) {
-
         if (isVisible) {
             bottomNavigationView.setVisibility(View.VISIBLE);
         } else {
