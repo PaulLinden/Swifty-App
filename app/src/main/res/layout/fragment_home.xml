@@ -8,6 +8,7 @@
     android:background="@drawable/app_bg"
     tools:context=".fragments.HomeFragment">
 
+    <!-- Not implemented
 
     <EditText
         android:id="@+id/search"
@@ -28,18 +29,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+        -->
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="560dp"
         android:background="@drawable/rounded_corners_top"
-        android:paddingVertical="20dp"
         android:paddingHorizontal="16dp"
+        android:paddingVertical="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search"
-        app:layout_constraintVertical_bias="0.893">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.951">
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -71,9 +71,8 @@ public class CartFragment extends Fragment {
         DeliverStrings deliverStrings = getStrings();
         //Set bottom navigation bar visibility
         activity.runOnUiThread(() -> activity.setBottomNavigationBarVisibility(true, activity.bottomNavigationView));
-
         // Set layout for RecyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
         // Set adapter to RecyclerView
         recyclerView.setAdapter(cartAdapter);
         //Get cart items
