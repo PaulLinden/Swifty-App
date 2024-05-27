@@ -57,7 +57,7 @@ public class CartFragment extends Fragment {
         context = requireContext();
         sessionManager = new UserSessionManager(context);
         cartViewModel = new ViewModelProvider(activity).get(CartViewModel.class);
-        cartAdapter = new CartAdapter(new ArrayList<>(), cartViewModel);
+        cartAdapter = new CartAdapter(new ArrayList<>(), cartViewModel, true);
         transactionUrl = getTransactionUrl(context);
     }
 

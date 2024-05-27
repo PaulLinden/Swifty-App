@@ -26,9 +26,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     private List<CartItem> cartItems;
     private final CartViewModel cartViewModel;
-    public CartAdapter(List<CartItem> cartItems, CartViewModel cartViewModel) {
+    private final boolean showRemoveButton;
+    public CartAdapter(List<CartItem> cartItems, CartViewModel cartViewModel, boolean showRemoveButton) {
         this.cartItems = cartItems;
         this.cartViewModel = cartViewModel;
+        this.showRemoveButton = showRemoveButton;
     }
 
     @NonNull
@@ -45,6 +47,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
         CartItem cartItem = cartItems.get(position);
         holder.bind(cartItem);
+
+        // Control button visibility:
+        holder.removeButton.setVisibility(showRemoveButton ? View.VISIBLE : View.GONE);
     }
 
     @Override
