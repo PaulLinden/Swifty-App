@@ -54,7 +54,7 @@
             android:id="@+id/emailLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="40dp"
             android:layout_gravity="start"
             android:gravity="start"
             android:text="@string/email"
@@ -67,11 +67,11 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/round_corners_black_border"
-            android:paddingHorizontal="24dp"
-            android:paddingVertical="5dp"
             android:textColor="@color/dark_blue"
             android:textStyle="italic"
-            android:textSize="24sp" />
+            android:gravity="center_vertical"
+            android:paddingHorizontal="15dp"
+            android:textSize="18sp" />
 
         <!-- First name  -->
 
@@ -79,7 +79,7 @@
             android:id="@+id/firstNameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="40dp"
             android:layout_gravity="start"
             android:text="@string/first_name"
             android:textColor="@color/black" />
@@ -91,18 +91,19 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/round_corners_black_border"
-            android:paddingHorizontal="24dp"
             android:paddingVertical="5dp"
             android:textColor="@color/dark_blue"
             android:textStyle="italic"
-            android:textSize="24sp" />
+            android:gravity="center_vertical"
+            android:paddingHorizontal="15dp"
+            android:textSize="18sp" />
 
         <!-- Last name  -->
         <TextView
             android:id="@+id/lastNameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="40dp"
             android:layout_gravity="start"
             android:text="@string/last_name"
             android:textColor="@color/black" />
@@ -114,18 +115,19 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/round_corners_black_border"
-            android:paddingHorizontal="24dp"
             android:paddingVertical="5dp"
             android:textColor="@color/dark_blue"
             android:textStyle="italic"
-            android:textSize="24sp" />
+            android:gravity="center_vertical"
+            android:paddingHorizontal="15dp"
+            android:textSize="18sp" />
 
         <!-- Birthdate  -->
         <TextView
             android:id="@+id/birthDateLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="40dp"
             android:layout_gravity="start"
             android:text="@string/birthdate"
             android:textColor="@color/black" />
@@ -137,11 +139,12 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="84dp"
             android:background="@drawable/round_corners_black_border"
-            android:paddingHorizontal="24dp"
             android:paddingVertical="5dp"
             android:textColor="@color/dark_blue"
             android:textStyle="italic"
-            android:textSize="24sp" />
+            android:gravity="center_vertical"
+            android:paddingHorizontal="15dp"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
