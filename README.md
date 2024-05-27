@@ -55,13 +55,14 @@ The app is built using the following technologies:
 
 ## Setup/Configuration
 
-To make the app runnable you need to connect i to the serverApplication. In project-root create a
-local.properties file and add the following:
+To make the app runnable you need to connect i to the serverApplication. In app/src/main/ create a
+assets folder with a config.properties file and add the following:
 
 BASE_URL=http://{YOUR_IP}:3000/api/
 LOGIN=users/loginUser
 COMPANY=firebase/data?path=companies
 TRANSACTION=transaction
+CREATE_USER=users/register/individual
 
 Replace YOUR_IP with the your ip-address.
 
