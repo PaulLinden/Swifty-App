@@ -96,12 +96,12 @@ public class SignUpFragment extends Fragment {
                 //Disable button
                 confirmButton.setBackgroundColor(ContextCompat.getColor(context, R.color.mid_grey));
                 //Set user data
-                newUser.setEmail(email.getText().toString());
-                newUser.setUsername(username.getText().toString());
-                newUser.setFirstName(firstName.getText().toString());
-                newUser.setLastName(lastName.getText().toString());
-                newUser.setBirthdate(birthdate.getText().toString());
-                newUser.setPassword(password.getText().toString());
+                newUser.setEmail(email.getText().toString().trim());
+                newUser.setUsername(username.getText().toString().trim());
+                newUser.setFirstName(firstName.getText().toString().trim());
+                newUser.setLastName(lastName.getText().toString().trim());
+                newUser.setBirthdate(birthdate.getText().toString().trim());
+                newUser.setPassword(password.getText().toString().trim());
                 //Create user in background thread
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.submit(() -> {
