@@ -58,7 +58,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         this.cartItems = cartItems;
         notifyDataSetChanged(); // Notify RecyclerView that the dataset has changed
     }
-    // ViewHolder class
+
+    //Inner class for the ViewHolder class
     public class CartViewHolder extends RecyclerView.ViewHolder {
         // Initialize views
         private final TextView productNameTextView;
