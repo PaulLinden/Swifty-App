@@ -67,8 +67,8 @@ public class LoginFragment extends Fragment {
                 //Show loading dialog
                 loadingDialog.show(getParentFragmentManager(), "loading_dialog");
                 //Get user credentials
-                String username = usernameInput.getText().toString(),
-                        password = passwordInput.getText().toString();
+                String username = usernameInput.getText().toString().trim(),
+                        password = passwordInput.getText().toString().trim();
                 try {
                     //Validate user credentials
                     UserModel validUser = getValidUser(username, password, serverUrl);
