@@ -6,6 +6,12 @@ import java.util.List;
 
 import java.util.ArrayList;
 
+/*
+* This is a model class for a transaction. It contains the user's ID, email,
+* date and time, and a list of transaction items. It also implements the Serializable interface.
+* Date and time are stored as strings in the database and are always set to the current date and time.
+* */
+
 public class TransactionModel implements Serializable {
 
     private final Long userId;

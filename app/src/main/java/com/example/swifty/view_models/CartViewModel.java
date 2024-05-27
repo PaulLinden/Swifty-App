@@ -9,13 +9,21 @@ import com.example.swifty.models.CartItem;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+* This class is responsible for adding and removing items from the cart.
+* It also provides a method to empty the cart.
+* It uses the LiveData pattern to notify the UI when the cart changes.
+* */
+
 public class CartViewModel extends ViewModel {
     private final MutableLiveData<List<CartItem>> cartItemsLiveData = new MutableLiveData<>();
     private final List<CartItem> cartItems = new ArrayList<>();
+
+    //Get the cart items
     public LiveData<List<CartItem>> getCartItemsLiveData() {
         return cartItemsLiveData;
     }
-
+    // Add an item to the cart
     public void addToCart(CartItem cartItem) {
         boolean itemExists = false;
 
@@ -32,10 +40,11 @@ public class CartViewModel extends ViewModel {
         if (!itemExists) {
             cartItems.add(cartItem);
         }
+        // Notify the UI that the cart has changed
         cartItemsLiveData.setValue(cartItems);
     }
 
-
+    // Remove all items from the cart
     public void emptyCart() {
         cartItems.clear();
         cartItemsLiveData.setValue(cartItems);

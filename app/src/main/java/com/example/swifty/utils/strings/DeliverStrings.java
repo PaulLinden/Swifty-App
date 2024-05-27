@@ -2,6 +2,10 @@ package com.example.swifty.utils.strings;
 
 import androidx.annotation.NonNull;
 
+/*
+* This class holds the strings for the Deliver.java class.
+* */
+
 public record DeliverStrings(String completeTitle, String completeParagraph, String errorTitle, String errorParagraph) {
     @NonNull
     public static DeliverStrings getStrings() {

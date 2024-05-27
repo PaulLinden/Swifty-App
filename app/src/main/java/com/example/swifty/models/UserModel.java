@@ -2,6 +2,11 @@ package com.example.swifty.models;
 
 import java.io.Serializable;
 
+/*
+* This is the model class for the user. It implements the Serializable interface so that it
+* can be serialized and deserialized. This class is used to store the user's information in the database.
+* */
+
 public class UserModel implements Serializable {
 
     private Long id;

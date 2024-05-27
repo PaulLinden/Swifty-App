@@ -1,5 +1,10 @@
 package com.example.swifty.utils.coordinates;
 
+/*
+* This class is a utility class for calculating the midpoint between two coordinates.
+* It has two static methods: calculateMidpoint and calculateDistance.
+* */
+
 public class CoordinatesCalculator {
 
     public static double[] calculateMidpoint(double lat1, double lon1, double lat2, double lon2) {

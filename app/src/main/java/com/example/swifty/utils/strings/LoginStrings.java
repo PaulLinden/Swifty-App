@@ -2,6 +2,10 @@ package com.example.swifty.utils.strings;
 
 import androidx.annotation.NonNull;
 
+/*
+ * This class holds the strings for the Login.java class.
+ * */
+
 public record LoginStrings(String failedTitle, String failedParagraph, String errorTitle, String errorParagraph) {
 
     @NonNull

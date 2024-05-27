@@ -4,6 +4,11 @@ package com.example.swifty.models;
 import java.io.Serializable;
 import java.util.List;
 
+/*
+* This class represents a company model. It contains the company name, url, and a list of products.
+* This class implements the Serializable interface to allow it to be serialized and deserialized.
+* */
+
 public class CompanyModel implements Serializable {
 
     public CompanyModel(String companyName, String url, List<String> productList){
