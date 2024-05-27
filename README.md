@@ -18,21 +18,17 @@ time, it will undergo enhancements to bolster its robustness and scalability.
 
 Current fragments in the app:
 
-- Sign up
-  ![signup.jpg](./app/screenshots/signup.jpg)
-- Login
-  ![login.jpg](./app/screenshots/login.jpg)  
-- Homepage
-  ![home.jpg](./app/screenshots/home.jpg)  
-- Profile
-  ![profile.jpg](./app/screenshots/profile.jpg)  
-- Shop
-  ![shop.jpg](./app/screenshots/shop.jpg)  
-- Cart
-  ![cart.jpg](./app/screenshots/cart.jpg)  
-- Deliver
-  ![deliver.jpg](./app/screenshots/deliver.jpg)  
+| Sign up                 | Login                    | Home                    |
+| ------------------------ | ------------------------ | ------------------------ |
+|  <img src="./app/screenshots/signup.jpg" alt="Sign up Screen" height="500"> | <img src="./app/screenshots/login.jpg" alt="Login Screen" height="500"> | <img src="./app/screenshots/home.jpg" alt="Home Screen" height="500"> |
 
+| Profile                 | Shop                    | Cart                    |
+| ------------------------ | ------------------------ | ------------------------ |
+|  <img src="./app/screenshots/profile.jpg" alt="Profile Screen" height="500"> | <img src="./app/screenshots/shop.jpg" alt="Shop Screen" height="500"> | <img src="./app/screenshots/cart.jpg" alt="Cart Screen" height="500"> |
+
+| Profile                 |
+| ------------------------ |
+|  <img src="./app/screenshots/deliver.jpg" alt="Deliver Screen" height="500"> |
 
 ## Technical Details
 
