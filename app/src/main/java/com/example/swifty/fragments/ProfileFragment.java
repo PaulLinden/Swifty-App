@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.MultiTransformation;
@@ -61,12 +63,20 @@ public class ProfileFragment extends Fragment {
                 birthDateText = view.findViewById(R.id.birthDateTextView),
                 firstNameText = view.findViewById(R.id.firstNameTextView),
                 lastNameText = view.findViewById(R.id.lastNameTextView);
+        //Get logout button
+        Button logoutButton = view.findViewById(R.id.logoutButton);
         //Set credentials in each field
         nameText.setText(username);
         emailText.setText(email);
         firstNameText.setText(firstName);
         lastNameText.setText(lastName);
         birthDateText.setText(birthDate);
+        //Set logout button listener
+        logoutButton.setOnClickListener(v -> {
+            //Clear user session
+            sessionManager.logout();
+            Navigation.findNavController(v).navigate( R.id.action_profileFragment_to_loginFragment);
+        });
         //Set navbar visible
         activity.runOnUiThread(() -> activity.setBottomNavigationBarVisibility(true, activity.bottomNavigationView));
         //Set placeholder image for profile

@@ -46,4 +46,10 @@ public class UserSessionManager {
         String birthDate = sharedPreferences.getString(KEY_BIRTHDATE, "");
         return new String[]{userId, username, firstName, lastName, email, birthDate};
     }
+
+    // Method to clear user credentials on logout.
+    public void logout() {
+        editor.clear();
+        editor.apply();
+    }
 }
