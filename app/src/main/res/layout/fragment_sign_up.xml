@@ -28,6 +28,7 @@
             android:paddingHorizontal="24dp"
             android:textAlignment="center"
             android:text="@string/please_check_your_input"
+            android:textStyle="italic"
             android:textColor="@color/error_color"
             android:visibility="invisible"
             android:textSize="24sp" />
@@ -46,8 +47,8 @@
 
         <EditText
             android:id="@+id/usernameTextView"
-            android:layout_width="309dp"
-            android:layout_height="45dp"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="10dp"
             android:autofillHints="username"
@@ -73,8 +74,8 @@
 
         <EditText
             android:id="@+id/emailTextView"
-            android:layout_width="309dp"
-            android:layout_height="45dp"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="10dp"
             android:autofillHints="emailAddress"
@@ -100,8 +101,8 @@
 
         <EditText
             android:id="@+id/passwordTextView"
-            android:layout_width="309dp"
-            android:layout_height="45dp"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="10dp"
             android:autofillHints="password"
@@ -126,8 +127,8 @@
 
         <EditText
             android:id="@+id/firstNameTextView"
-            android:layout_width="309dp"
-            android:layout_height="45dp"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="10dp"
             android:autofillHints="firstname"
@@ -152,8 +153,8 @@
 
         <EditText
             android:id="@+id/lastNameTextView"
-            android:layout_width="309dp"
-            android:layout_height="45dp"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="10dp"
             android:autofillHints="lastname"
@@ -178,10 +179,10 @@
 
         <EditText
             android:id="@+id/birthDateTextView"
-            android:layout_width="309dp"
-            android:layout_height="45dp"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="25dp"
             android:autofillHints="birthdate"
             android:hint="@string/birthdate"
             android:background="@drawable/round_corners_black_border"
@@ -193,9 +194,9 @@
 
         <Button
             android:id="@+id/create_button"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_width="240dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
             android:backgroundTint="@color/light_green"
             android:textColor="@color/dark_blue"
             android:text="@string/create_new_account" />
@@ -203,10 +204,10 @@
         <Button
             android:id="@+id/cancel_button"
             android:layout_width="200dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:backgroundTint="@color/light_green"
-            android:textColor="@color/dark_blue"
-            android:text="@string/cancel" />
+            android:text="@string/cancel"
+            android:textColor="@color/dark_blue" />
 
     </LinearLayout>
 
